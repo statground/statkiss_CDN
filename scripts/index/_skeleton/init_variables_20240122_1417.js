@@ -1,0 +1,2 @@
+let class_tab_right_banner_skeleton = "flex flex-row justify-center items-center bg-gray-200 w-[250px] h-[75px]"
+let class_tab_footer_banner_skeleton = "flex flex-row justify-center items-center bg-gray-200 w-[300px] min-w-[300px] max-w-[300px] h-[75px] min-h-[75px] max-h-[75px]"
