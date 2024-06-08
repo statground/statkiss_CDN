@@ -1,7 +1,12 @@
 function Div_table_tbody(props) {
 	const tr_list = Object.keys(props.index_list).map((btn_data) => 
+<<<<<<< HEAD
 		<div class="w-full border-b px-4 py-3 hover:bg-gray-100 cursor-pointer"
 			 onClick={() => location.href='/announcement/' + url + '/read/' + data_list[props.index_list[btn_data]].uuid + '/'}>
+=======
+		<a class="w-full border-b px-4 py-3 hover:bg-gray-100 cursor-pointer"
+			 href={'/announcement/' + url + '/read/' + data_list[props.index_list[btn_data]].uuid + '/'}>
+>>>>>>> 5622fc67c4d35cc9b408c2387e20f779b911bac4
 			<div class="flex flex-col w-full space-y-2">
 				<div class="flex flex-row justify-center items-center bg-blue-200 w-fit h-5 px-2 space-x-2 rounded-xl">
 					<span class="text-xs text-gray-700">{data_list[props.index_list[btn_data]].category}</span>
@@ -24,7 +29,11 @@ function Div_table_tbody(props) {
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
 		</div>
+=======
+		</a>
+>>>>>>> 5622fc67c4d35cc9b408c2387e20f779b911bac4
 	)
 
 
