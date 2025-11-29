@@ -14,9 +14,9 @@ async function get_member_summary() {
 													   + Object.values(props.data.membership).filter(it => it.role == 'Developer')[0].cnt} />
 						<Div_card title={"Lifetime Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Lifetime Member')[0].cnt} />
 						<Div_card title={"Regular Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Regular Member')[0].cnt} />
-						<Div_card title={"Spause Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Spause Member')[0].cnt} />
+						<Div_card title={"Spouse Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Spouse Member')[0].cnt} />
 						<Div_card title={"Student Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Student Member')[0].cnt} />
-						<Div_card title={"Member"} count={Object.values(props.data.membership).filter(it => it.role == 'Member')[0].cnt} />
+						<Div_card title={"Non-member"} count={Object.values(props.data.membership).filter(it => it.role == 'Non-member')[0].cnt} />
 					</div>
 				</div>
 

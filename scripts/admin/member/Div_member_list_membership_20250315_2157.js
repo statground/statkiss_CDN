@@ -52,11 +52,11 @@ function Div_member_list_membership(props) {
 
 			<div class="flex flex-row justify-center items-center w-full space-x-2">
 				{
-					props.role_expired_at != null 
-					?   <p class="flex flex-row justify-center items-center text-xs font-light text-red-500 px-2 py-1">
+					props.role_expired_at && (
+						<p class="flex flex-row justify-center items-center text-xs font-light text-red-500 px-2 py-1">
 							Expired on {props.role_expired_at}
 						</p>
-					:   ""
+					)
 				}
 			</div>
 		</div>

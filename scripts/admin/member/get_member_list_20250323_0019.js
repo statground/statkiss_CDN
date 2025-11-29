@@ -11,10 +11,11 @@ async function get_member_list(mode) {
 		document.getElementById("check_member_admin").checked = true
 		document.getElementById("check_member_lifetime").checked = true
 		document.getElementById("check_member_regular").checked = true
-		document.getElementById("check_member_spauce").checked = true
-		document.getElementById("check_member_kss_joint").checked = true
+		document.getElementById("check_member_spouse").checked = true
 		document.getElementById("check_member_student").checked = true
 		document.getElementById("check_member_member").checked = true
+		document.getElementById("check_member_addon_none").checked = true
+		document.getElementById("check_member_addon_kssjoint").checked = true
 	} else if (mode == "search") { 
 		page_num = 1 
 		ReactDOM.render(<Div_member_list_skeleton />, document.getElementById("div_member_list"))
@@ -34,14 +35,18 @@ async function get_member_list(mode) {
 	if (document.getElementById("check_member_lifetime").checked) {    check_member_lifetime = "YES"; }
 	check_member_regular = "NO"
 	if (document.getElementById("check_member_regular").checked) {    check_member_regular = "YES"; }
-	check_member_spauce = "NO"
-	if (document.getElementById("check_member_spauce").checked) {    check_member_spauce = "YES"; }
-	check_member_kss_joint = "NO"
-	if (document.getElementById("check_member_kss_joint").checked) {    check_member_kss_joint = "YES"; }
+	check_member_spouse = "NO"
+	if (document.getElementById("check_member_spouse").checked) {    check_member_spouse = "YES"; }
 	check_member_student = "NO"
 	if (document.getElementById("check_member_student").checked) {    check_member_student = "YES"; }
 	check_member_member = "NO"
 	if (document.getElementById("check_member_member").checked) {    check_member_member = "YES"; }
+	check_member_addon_none = "NO"
+	if (document.getElementById("check_member_addon_none").checked) {    check_member_addon_none = "YES"; }
+	check_member_addon_kssjoint = "NO"
+	if (document.getElementById("check_member_addon_kssjoint").checked) {    check_member_addon_kssjoint = "YES"; }
+	check_member_pending_student = "NO"
+	if (document.getElementById("check_member_pending_student").checked) {    check_member_pending_student = "YES"; }
 
 	const request_data = new FormData();
 	request_data.append('page', page_num);      // 페이지
@@ -50,10 +55,12 @@ async function get_member_list(mode) {
 	request_data.append('check_member_admin', check_member_admin);
 	request_data.append('check_member_lifetime', check_member_lifetime);
 	request_data.append('check_member_regular', check_member_regular);
-	request_data.append('check_member_spauce', check_member_spauce);
-	request_data.append('check_member_kss_joint', check_member_kss_joint);
+	request_data.append('check_member_spouse', check_member_spouse);
 	request_data.append('check_member_student', check_member_student);
 	request_data.append('check_member_member', check_member_member);
+	request_data.append('check_member_addon_none', check_member_addon_none);
+	request_data.append('check_member_addon_kssjoint', check_member_addon_kssjoint);
+	request_data.append('check_member_pending_student', check_member_pending_student);
 
 	const data = await fetch("/admin/ajax_get_member_list/", {
 						method: "post", 
