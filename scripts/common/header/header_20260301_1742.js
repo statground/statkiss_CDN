@@ -35,12 +35,13 @@ const { useEffect, useMemo, useRef, useState } = React;
       html.dark header.statkiss-header .statkiss-divider { color: rgba(148,163,184,0.65) !important; }
 
       /* Fix: make logo visible in dark mode with shape-following white shadow */
-      html.dark header.statkiss-header img.statkiss-logo {
+            html.dark header.statkiss-header img.statkiss-logo {
+        /* crisper, cleaner outline (alpha-following) */
         filter:
-          drop-shadow(0 0 10px rgba(255,255,255,0.55))
-          drop-shadow(0 0 22px rgba(255,255,255,0.35))
-          brightness(1.15)
-          contrast(1.08);
+          drop-shadow(0 0 2px rgba(255,255,255,0.70))
+          drop-shadow(0 0 6px rgba(255,255,255,0.28))
+          brightness(1.12)
+          contrast(1.10);
       }
     `;
     document.head.appendChild(style);
@@ -593,3 +594,55 @@ const { useEffect, useMemo, useRef, useState } = React;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoMountIfNeeded);
   else autoMountIfNeeded();
 })();
+
+
+
+// ===== Solid 5px White Outline via SVG Morphology (No Blur) =====
+document.addEventListener("DOMContentLoaded", function () {
+  if (!document.getElementById("kiss-outline-svg")) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("id", "kiss-outline-svg");
+    svg.setAttribute("width", "0");
+    svg.setAttribute("height", "0");
+    svg.style.position = "absolute";
+    svg.style.visibility = "hidden";
+
+    const defs = document.createElementNS(svgNS, "defs");
+    const filter = document.createElementNS(svgNS, "filter");
+    filter.setAttribute("id", "kiss-outline");
+
+    const morphology = document.createElementNS(svgNS, "feMorphology");
+    morphology.setAttribute("in", "SourceAlpha");
+    morphology.setAttribute("operator", "dilate");
+    morphology.setAttribute("radius", "5");
+
+    const flood = document.createElementNS(svgNS, "feFlood");
+    flood.setAttribute("flood-color", "#ffffff");
+    flood.setAttribute("result", "whiteFill");
+
+    const composite = document.createElementNS(svgNS, "feComposite");
+    composite.setAttribute("in", "whiteFill");
+    composite.setAttribute("in2", "morphology");
+    composite.setAttribute("operator", "in");
+    composite.setAttribute("result", "outline");
+
+    const merge = document.createElementNS(svgNS, "feMerge");
+    const mergeNode1 = document.createElementNS(svgNS, "feMergeNode");
+    mergeNode1.setAttribute("in", "outline");
+    const mergeNode2 = document.createElementNS(svgNS, "feMergeNode");
+    mergeNode2.setAttribute("in", "SourceGraphic");
+
+    merge.appendChild(mergeNode1);
+    merge.appendChild(mergeNode2);
+
+    filter.appendChild(morphology);
+    filter.appendChild(flood);
+    filter.appendChild(composite);
+    filter.appendChild(merge);
+
+    defs.appendChild(filter);
+    svg.appendChild(defs);
+    document.body.appendChild(svg);
+  }
+});
