@@ -42,7 +42,7 @@ function set_main() {
       html.dark .kiss-main-bg .bg-indigo-50 { background-color:#0f172a !important; }
       html.dark .kiss-main-bg .bg-slate-100 { background-color:#0f172a !important; }
       html.dark .kiss-main-bg .text-indigo-600 { color:#93c5fd !important; }
-      \n      html.dark .kiss-main-bg .bulletin-item { background-color: rgba(255,255,255,0.035) !important; border: none !important; box-shadow: none !important; }\n      
+      \n      \n      
       html.dark .kiss-main-bg .bulletin-item.border { border: none !important; }
       html.dark .kiss-main-bg .shadow-xl,
       html.dark .kiss-main-bg .shadow-lg,
@@ -53,8 +53,55 @@ function set_main() {
       /* Bulletin container background fix (Tailwind class with slash) */
       html.dark .kiss-main-bg .bg-slate-50\/50 { background-color: rgba(255,255,255,0.03) !important; }
       html.dark .kiss-main-bg .bg-slate-50\/50 * { border-color: rgba(255,255,255,0.06) !important; }
-      html.dark .kiss-main-bg .bulletin-item { background-color: rgba(255,255,255,0.03) !important; border: none !important; box-shadow: none !important; }
+      
       html.dark .kiss-main-bg .bulletin-item .bg-indigo-50 { background-color: rgba(59,130,246,0.16) !important; }
+    
+      /* Fix hover turning white on dark backgrounds */
+      html.dark .kiss-main-bg .latest-item:hover { background-color: rgba(255,255,255,0.08) !important; }
+      html.dark .kiss-main-bg .latest-item:hover * { color: inherit !important; }
+      html.dark .kiss-main-bg .latest-item .text-indigo-600 { color:#93c5fd !important; }
+    
+      /* Unified dark card styling for Bulletin */
+      html.dark .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
+      html.dark .kiss-main-bg .bulletin-item:hover {
+        background-color: #111827 !important;
+      }
+      html.dark .kiss-main-bg .bulletin-item .text-slate-800,
+      html.dark .kiss-main-bg .bulletin-item .text-slate-900 {
+        color: #e2e8f0 !important;
+      }
+      html.dark .kiss-main-bg .bulletin-item .text-slate-500,
+      html.dark .kiss-main-bg .bulletin-item .text-slate-400 {
+        color: #94a3b8 !important;
+      }
+    
+      /* Soften outer Bulletin section border */
+      html.dark .kiss-main-bg .rounded-3xl { border: none !important; }
+
+      /* Bulletin card borders thinner + subtle */
+      html.dark .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
+
+      /* Remove heavy inner separators */
+      html.dark .kiss-main-bg .divide-slate-50 {
+        border-color: rgba(148,163,184,0.06) !important;
+      }
+    
+      /* Force-remove borders in Bulletin section on dark mode */
+      html.dark .kiss-main-bg .bulletin-section,
+      html.dark .kiss-main-bg .bulletin-section * {
+        outline: none !important;
+      }
+      html.dark .kiss-main-bg .bulletin-section .border,
+      html.dark .kiss-main-bg .bulletin-section [class*="border-"],
+      html.dark .kiss-main-bg .bulletin-section [class~="border"] {
+        border: none !important;
+      }
+      html.dark .kiss-main-bg .bulletin-item,
+      html.dark .kiss-main-bg a.bulletin-item {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+      }
     `;
     document.head.appendChild(style);
   })();
@@ -134,7 +181,7 @@ function set_main() {
     return (
       <a
         href={articleHref(item)}
-        className={"group flex justify-between gap-4 py-3 px-2 rounded-lg transition hover:bg-slate-50 dark:hover:bg-slate-800/60 " + (isDesktop ? "flex-row items-start" : "flex-col")}
+        className={"latest-item group flex justify-between gap-4 py-3 px-2 rounded-lg transition hover:bg-slate-50 dark:hover:bg-white/10 " + (isDesktop ? "flex-row items-start" : "flex-col")}
       >
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-indigo-500">
