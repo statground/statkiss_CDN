@@ -14,111 +14,132 @@ function set_main() {
   const ROOT_ID = "div_main";
   const DESKTOP_BP = 1024;
 
+  // Ensure Tailwind dark variants actually work:
+  // Some pages toggle dark on <body> or another wrapper instead of <html>.
+  // We mirror it onto <html> so `dark:` classes apply reliably.
+  (function syncDarkClass(){
+    const html = document.documentElement;
+    const body = document.body;
+    if (!html || !body) return;
+
+    const apply = () => {
+      const isDark =
+        body.classList.contains("dark") ||
+        html.classList.contains("dark") ||
+        document.documentElement.getAttribute("data-theme") === "dark" ||
+        document.body.getAttribute("data-theme") === "dark";
+      if (isDark) html.classList.add("dark");
+      else html.classList.remove("dark");
+    };
+
+    // initial + watch
+    apply();
+    const mo = new MutationObserver(apply);
+    mo.observe(body, { attributes:true, attributeFilter:["class","data-theme"] });
+    mo.observe(html, { attributes:true, attributeFilter:["class","data-theme"] });
+  })();
+
+
   // Dark mode fallback CSS for main (works even if Tailwind dark variants are not enabled)
   (function injectDarkFallback(){
     if (document.getElementById('statkiss-main-dark-fallback')) return;
     const style = document.createElement('style');
     style.id = 'statkiss-main-dark-fallback';
     style.textContent = `
-      html.dark body { background-color:#020617; color:#e2e8f0; }
-      html.dark .kiss-main-bg { background-color:#020617; color:#e2e8f0; }
-      html.dark .kiss-card { background-color:#0b1220 !important; border-color:rgba(148,163,184,0.14) !important; }
-      html.dark .kiss-muted { color:#94a3b8 !important; }
-      html.dark .kiss-border { border-color:rgba(148,163,184,0.14) !important; }
-      html.dark .kiss-hover:hover { background-color:#111827 !important; }
-      html.dark .kiss-chip { background-color:#111827 !important; color:#e2e8f0 !important; }
+      :is(html.dark, body.dark, .dark) body { background-color:#020617; color:#e2e8f0; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg { background-color:#020617; color:#e2e8f0; }
+      :is(html.dark, body.dark, .dark) .kiss-card { background-color:#0b1220 !important; border-color:rgba(148,163,184,0.14) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-muted { color:#94a3b8 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-border { border-color:rgba(148,163,184,0.14) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-hover:hover { background-color:#111827 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-chip { background-color:#111827 !important; color:#e2e8f0 !important; }
     
-      html.dark .kiss-main-bg .bg-white { background-color:#0b1220 !important; }
-      html.dark .kiss-main-bg .bg-slate-50 { background-color:#020617 !important; }
-      html.dark .kiss-main-bg .text-slate-900,
-      html.dark .kiss-main-bg .text-slate-800 { color:#e2e8f0 !important; }
-      html.dark .kiss-main-bg .text-slate-700,
-      html.dark .kiss-main-bg .text-slate-600,
-      html.dark .kiss-main-bg .text-slate-500 { color:#cbd5e1 !important; }
-      html.dark .kiss-main-bg .text-slate-400 { color:#94a3b8 !important; }
-      html.dark .kiss-main-bg .border-slate-100,
-      html.dark .kiss-main-bg .border-slate-200 { border-color:rgba(148,163,184,0.14) !important; }
-      html.dark .kiss-main-bg .divide-slate-50 { border-color:rgba(148,163,184,0.14) !important; }
-      html.dark .kiss-main-bg .bg-indigo-50 { background-color:#0f172a !important; }
-      html.dark .kiss-main-bg .bg-slate-100 { background-color:#0f172a !important; }
-      html.dark .kiss-main-bg .text-indigo-600 { color:#93c5fd !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-white { background-color:#0b1220 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-slate-50 { background-color:#020617 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-900,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-800 { color:#e2e8f0 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-700,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-600,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-500 { color:#cbd5e1 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-slate-400 { color:#94a3b8 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .border-slate-100,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .border-slate-200 { border-color:rgba(148,163,184,0.14) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .divide-slate-50 { border-color:rgba(148,163,184,0.14) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-indigo-50 { background-color:#0f172a !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-slate-100 { background-color:#0f172a !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .text-indigo-600 { color:#93c5fd !important; }
       \n      \n      
-      html.dark .kiss-main-bg .bulletin-item.border { border: none !important; }
-
-      /* Bulletin item (card) outline 제거: dark 모드에서는 border + shadow 모두 제거 */
-      html.dark .kiss-main-bg .bulletin-item { border-color: transparent !important; box-shadow: none !important; }
-      html.dark .kiss-main-bg .bulletin-item:hover { border-color: transparent !important; box-shadow: none !important; }
-
-      html.dark .kiss-main-bg .shadow-xl,
-      html.dark .kiss-main-bg .shadow-lg,
-      html.dark .kiss-main-bg .shadow-md { box-shadow: 0 18px 44px rgba(0,0,0,.35) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item.border { border: none !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .shadow-xl,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .shadow-lg,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .shadow-md { box-shadow: 0 18px 44px rgba(0,0,0,.35) !important; }
     
-      html.dark .kiss-main-bg .bg-slate-100.text-slate-500 { color:#cbd5e1 !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-slate-100.text-slate-500 { color:#cbd5e1 !important; }
 
       /* Bulletin container background fix (Tailwind class with slash) */
-      html.dark .kiss-main-bg .bg-slate-50\/50 { background-color: rgba(255,255,255,0.03) !important; }
-      html.dark .kiss-main-bg .bg-slate-50\/50 * { border-color: rgba(255,255,255,0.06) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-slate-50\/50 { background-color: rgba(255,255,255,0.03) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bg-slate-50\/50 * { border-color: rgba(255,255,255,0.06) !important; }
       
-      html.dark .kiss-main-bg .bulletin-item .bg-indigo-50 { background-color: rgba(59,130,246,0.16) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item .bg-indigo-50 { background-color: rgba(59,130,246,0.16) !important; }
     
       /* Fix hover turning white on dark backgrounds */
-      html.dark .kiss-main-bg .latest-item:hover { background-color: rgba(255,255,255,0.08) !important; }
-      html.dark .kiss-main-bg .latest-item:hover * { color: inherit !important; }
-      html.dark .kiss-main-bg .latest-item .text-indigo-600 { color:#93c5fd !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .latest-item:hover { background-color: rgba(255,255,255,0.08) !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .latest-item:hover * { color: inherit !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .latest-item .text-indigo-600 { color:#93c5fd !important; }
     
       /* Unified dark card styling for Bulletin */
-      html.dark .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
-      html.dark .kiss-main-bg .bulletin-item:hover {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item:hover {
         background-color: #111827 !important;
       }
-      html.dark .kiss-main-bg .bulletin-item .text-slate-800,
-      html.dark .kiss-main-bg .bulletin-item .text-slate-900 {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item .text-slate-800,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item .text-slate-900 {
         color: #e2e8f0 !important;
       }
-      html.dark .kiss-main-bg .bulletin-item .text-slate-500,
-      html.dark .kiss-main-bg .bulletin-item .text-slate-400 {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item .text-slate-500,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item .text-slate-400 {
         color: #94a3b8 !important;
       }
     
       /* Soften outer Bulletin section border */
-      html.dark .kiss-main-bg .rounded-3xl { border: none !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .rounded-3xl { border: none !important; }
 
       /* Bulletin card borders thinner + subtle */
-      html.dark .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item { background-color: #0b1220 !important; border: none !important; box-shadow: none !important; }
 
       /* Remove heavy inner separators */
-      html.dark .kiss-main-bg .divide-slate-50 {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .divide-slate-50 {
         border-color: rgba(148,163,184,0.06) !important;
       }
     
       /* Force-remove borders in Bulletin section on dark mode */
-      html.dark .kiss-main-bg .bulletin-section,
-      html.dark .kiss-main-bg .bulletin-section * {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section * {
         outline: none !important;
       }
-      html.dark .kiss-main-bg .bulletin-section .border,
-      html.dark .kiss-main-bg .bulletin-section [class*="border-"],
-      html.dark .kiss-main-bg .bulletin-section [class~="border"] {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .border,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section [class*="border-"],
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section [class~="border"] {
         border: none !important;
       }
-      html.dark .kiss-main-bg .bulletin-item,
-      html.dark .kiss-main-bg a.bulletin-item {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-item,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg a.bulletin-item {
         border: none !important;
         outline: none !important;
         box-shadow: none !important;
       }
     
       /* Bulletin gray frame is the list wrapper background. Remove it on dark. */
-      html.dark .kiss-main-bg .bulletin-section .bulletin-list {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-list {
         background: transparent !important;
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
       }
-      html.dark .kiss-main-bg .bulletin-section .bulletin-list.bg-slate-50\/50 {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-list.bg-slate-50\/50 {
         background: transparent !important;
       }
-      html.dark .kiss-main-bg .bulletin-section .bulletin-list > * {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-list > * {
         border: none !important;
       }
     
@@ -127,9 +148,9 @@ function set_main() {
          (1) wrapper bg + padding (bg-slate-50/50 + p-1)
          (2) per-item Tailwind border classes (border + border-slate-100)
       */
-      html.dark .kiss-main-bg .bulletin-section .bulletin-list,
-      html.dark .kiss-main-bg .bulletin-section .bulletin-list.bg-slate-50\/50,
-      html.dark .kiss-main-bg .bulletin-section .bg-slate-50\/50 {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-list,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-list.bg-slate-50\/50,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bg-slate-50\/50 {
         background: transparent !important;
         padding: 0 !important;
         border: none !important;
@@ -137,20 +158,20 @@ function set_main() {
       }
 
       /* Kill ALL borders/shadows inside Bulletin section */
-      html.dark .kiss-main-bg .bulletin-section a,
-      html.dark .kiss-main-bg .bulletin-section a * {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section a,
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section a * {
         border: none !important;
         outline: none !important;
         box-shadow: none !important;
       }
 
       /* Re-apply the intended dark card surface for each bulletin item */
-      html.dark .kiss-main-bg .bulletin-section .bulletin-item {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-item {
         background-color: #0b1220 !important;
         border: none !important;
         box-shadow: none !important;
       }
-      html.dark .kiss-main-bg .bulletin-section .bulletin-item:hover {
+      :is(html.dark, body.dark, .dark) .kiss-main-bg .bulletin-section .bulletin-item:hover {
         background-color: #111827 !important;
       }
     `;
@@ -382,7 +403,7 @@ function set_main() {
           })}
         </div>
 
-        <div className="bulletin-list space-y-3 bg-slate-50/50 p-1 rounded-xl dark:bg-slate-950/40">
+        <div className="bulletin-list space-y-3 bg-slate-50/50 p-1 rounded-xl dark:bg-transparent dark:p-0">
           {loading ? (
             <div className="p-4 text-center text-xs text-slate-400">{t(lang,"main.loading")}</div>
           ) : cur.list.length === 0 ? (
@@ -390,7 +411,7 @@ function set_main() {
           ) : (
             cur.list.slice(0,5).map(item => (
               <a key={item.uuid} href={articleHref(item)}
-                className="bulletin-item block rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:bg-slate-900 dark:border-transparent dark:shadow-none dark:hover:shadow-none">
+                className="bulletin-item block rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:bg-slate-900 dark:border-0 dark:hover:border-0 dark:shadow-none dark:hover:shadow-none">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="rounded bg-indigo-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-indigo-600">{item.category || cur.label}</span>
                   <span className="text-[10px] text-slate-400">{fmtDate(item.created_at_kst || item.date, lang)}</span>
@@ -436,21 +457,21 @@ function set_main() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-600 p-6 text-white shadow-xl shadow-indigo-500/30">
+        <div className="relative overflow-hidden rounded-3xl bg-white p-6 text-slate-900 shadow-xl shadow-slate-900/5 dark:bg-gradient-to-br dark:from-indigo-600 dark:to-violet-600 dark:text-white dark:shadow-indigo-500/30">
           <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10 blur-xl"></div>
           <div className="absolute -left-10 -bottom-10 h-28 w-28 rounded-full bg-white/10 blur-xl"></div>
 
           <div className="relative z-10 flex items-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700 dark:bg-white/20 dark:text-white">
               <span className="text-2xl leading-none">👥</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">{t(lang,"main.total_members")}</span>
-              <span className="text-[11px] text-white/90/80">{t(lang,"main.total_members_desc")}</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-800 dark:text-white/90">{t(lang,"main.total_members")}</span>
+              <span className="text-[11px] text-slate-500 dark:text-white/70">{t(lang,"main.total_members_desc")}</span>
             </div>
           </div>
 
-          <div className="relative z-10 mt-1 text-4xl font-extrabold tracking-tight text-right">
+          <div className="relative z-10 mt-1 text-4xl font-extrabold tracking-tight text-right text-slate-900 dark:text-white">
             {loadingMember ? "..." : String(memberCount).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           </div>
         </div>
