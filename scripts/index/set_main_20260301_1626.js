@@ -116,6 +116,38 @@ function set_main() {
       html.dark .kiss-main-bg .bulletin-section .bulletin-list > * {
         border: none !important;
       }
+    
+      /* === FINAL: remove Bulletin 'frames' on dark ===
+         The visible gray lines are: 
+         (1) wrapper bg + padding (bg-slate-50/50 + p-1)
+         (2) per-item Tailwind border classes (border + border-slate-100)
+      */
+      html.dark .kiss-main-bg .bulletin-section .bulletin-list,
+      html.dark .kiss-main-bg .bulletin-section .bulletin-list.bg-slate-50\/50,
+      html.dark .kiss-main-bg .bulletin-section .bg-slate-50\/50 {
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Kill ALL borders/shadows inside Bulletin section */
+      html.dark .kiss-main-bg .bulletin-section a,
+      html.dark .kiss-main-bg .bulletin-section a * {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Re-apply the intended dark card surface for each bulletin item */
+      html.dark .kiss-main-bg .bulletin-section .bulletin-item {
+        background-color: #0b1220 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      html.dark .kiss-main-bg .bulletin-section .bulletin-item:hover {
+        background-color: #111827 !important;
+      }
     `;
     document.head.appendChild(style);
   })();
@@ -353,7 +385,7 @@ function set_main() {
           ) : (
             cur.list.slice(0,5).map(item => (
               <a key={item.uuid} href={articleHref(item)}
-                className="bulletin-item block rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:bg-slate-900 dark:border-slate-800">
+                className="bulletin-item block rounded-xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md dark:bg-slate-900 dark:border-transparent dark:shadow-none">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="rounded bg-indigo-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-indigo-600">{item.category || cur.label}</span>
                   <span className="text-[10px] text-slate-400">{fmtDate(item.created_at_kst || item.date, lang)}</span>
