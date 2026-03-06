@@ -70,11 +70,17 @@ function set_main() {
     return (
       <div className="flex flex-col justify-center items-center w-full pt-12 pb-12 space-y-16">
 
-        <div
-			  className="flex w-full h-[420px] bg-center bg-contain bg-no-repeat"
-			  style={{ backgroundImage: "url('https://cdn.jsdelivr.net/gh/statground/statKISS_CDN/images/photos/025.jpg')" }}
-          aria-label="About KISS hero image"
-        />
+        
+        
+<div className="w-full h-[260px] md:h-[380px] overflow-hidden">
+  <img
+    src="https://cdn.jsdelivr.net/gh/statground/statKISS_CDN/images/photos/025.jpg"
+    className="w-full h-full object-cover"
+    alt="KISS seminar"
+  />
+</div>
+
+
 
         <div className="flex flex-col space-y-6 w-full max-w-screen-xl px-4 mx-auto">
           <div className="about-card w-full rounded-2xl border p-6 md:p-8">
