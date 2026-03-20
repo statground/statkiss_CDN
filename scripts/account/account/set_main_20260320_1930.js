@@ -6,6 +6,7 @@ window.set_main = function () {
     const MIN_PASSWORD_LENGTH = 8;
     const RETURN_TO_KEY = 'statkiss_account_login_return_to';
     const FALLBACK_LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'es', 'fr', 'de', 'pt-BR', 'ru', 'id', 'vi', 'th', 'ms', 'fil', 'hi', 'ar', 'it', 'nl', 'pl', 'sv', 'tr', 'uk'];
+    const HELPER_BASE_CLASS = 'mt-2 min-h-[1.25rem] text-xs';
 
     if (!app) return;
 
@@ -142,16 +143,71 @@ window.set_main = function () {
         return passwd.length < minLen ? 'FAILED' : 'SUCCESS';
     }
 
+    function setHelper(fieldId, message, tone) {
+        const helperEl = document.getElementById(fieldId + '_helper');
+        if (!helperEl) return;
+
+        const toneClass = {
+            info: 'text-slate-500 dark:text-slate-400',
+            success: 'text-emerald-600 dark:text-emerald-400',
+            error: 'text-rose-600 dark:text-rose-400'
+        }[tone || 'info'];
+
+        helperEl.className = HELPER_BASE_CLASS + ' ' + toneClass;
+        helperEl.textContent = message || '';
+    }
+
+    function applyFieldTone(fieldId, tone) {
+        const fieldEl = document.getElementById(fieldId);
+        if (!fieldEl) return;
+
+        const classesToRemove = [
+            'border-rose-500', 'focus:border-rose-500', 'focus:ring-rose-200', 'dark:border-rose-400',
+            'border-emerald-500', 'focus:border-emerald-500', 'focus:ring-emerald-200', 'dark:border-emerald-400'
+        ];
+        fieldEl.classList.remove.apply(fieldEl.classList, classesToRemove);
+        fieldEl.removeAttribute('aria-invalid');
+
+        if (tone === 'error') {
+            fieldEl.classList.add('border-rose-500', 'focus:border-rose-500', 'focus:ring-rose-200', 'dark:border-rose-400');
+            fieldEl.setAttribute('aria-invalid', 'true');
+            return;
+        }
+        if (tone === 'success') {
+            fieldEl.classList.add('border-emerald-500', 'focus:border-emerald-500', 'focus:ring-emerald-200', 'dark:border-emerald-400');
+        }
+    }
+
+    function showFieldMessage(fieldId, message, tone) {
+        setHelper(fieldId, message, tone || 'info');
+        applyFieldTone(fieldId, tone || 'info');
+    }
+
+    function clearFieldMessage(fieldId) {
+        setHelper(fieldId, '', 'info');
+        applyFieldTone(fieldId, 'info');
+    }
+
+    function clearLocalFeedback() {
+        clearFieldMessage('txt_email');
+        clearFieldMessage('txt_password');
+    }
+
+    function clearTransientErrors() {
+        if (typeof app.clearFieldErrors === 'function') app.clearFieldErrors();
+        if (typeof app.setNotice === 'function') app.setNotice('', 'info');
+    }
+
     const bodyHtml = [
         '<form id="account_login_form" class="space-y-5">',
         '  <div class="grid grid-cols-1 gap-5">',
         '      <div>',
         '          ' + app.textInput('txt_email', t('email'), { type: 'email', autocomplete: 'email', spellcheck: 'false' }),
-        '          <div id="txt_email_helper" class="mt-2 min-h-[1.25rem] text-xs text-slate-500 dark:text-slate-400"></div>',
+        '          <div id="txt_email_helper" class="' + HELPER_BASE_CLASS + ' text-slate-500 dark:text-slate-400"></div>',
         '      </div>',
         '      <div>',
         '          ' + app.textInput('txt_password', t('password'), { type: 'password', autocomplete: 'current-password' }),
-        '          <div id="txt_password_helper" class="mt-2 min-h-[1.25rem] text-xs text-slate-500 dark:text-slate-400"></div>',
+        '          <div id="txt_password_helper" class="' + HELPER_BASE_CLASS + ' text-slate-500 dark:text-slate-400"></div>',
         '      </div>',
         '  </div>',
         '  <div class="pt-2">' + app.primaryButton('btn_login', t('login')) + '</div>',
@@ -174,25 +230,6 @@ window.set_main = function () {
     const emailEl = document.getElementById('txt_email');
     const passwordEl = document.getElementById('txt_password');
 
-    function setHelper(fieldId, message, tone) {
-        const helperEl = document.getElementById(fieldId + '_helper');
-        if (!helperEl) return;
-
-        const toneClass = {
-            info: 'text-slate-500 dark:text-slate-400',
-            success: 'text-emerald-600 dark:text-emerald-400',
-            error: 'text-rose-600 dark:text-rose-400'
-        }[tone || 'info'];
-
-        helperEl.className = 'mt-2 min-h-[1.25rem] text-xs ' + toneClass;
-        helperEl.textContent = message || '';
-    }
-
-    function clearStaleErrors() {
-        if (typeof app.clearFieldErrors === 'function') app.clearFieldErrors();
-        if (typeof app.setNotice === 'function') app.setNotice('', 'info');
-    }
-
     function updateEmailHelper(force) {
         if (!emailEl) return 'NOT EXIST';
 
@@ -201,16 +238,16 @@ window.set_main = function () {
         const shouldShow = force || touched || String(emailEl.value || '').trim() !== '';
 
         if (!shouldShow) {
-            setHelper('txt_email', '', 'info');
+            clearFieldMessage('txt_email');
             return status;
         }
 
         if (status === 'SUCCESS') {
-            setHelper('txt_email', t('email_help_valid'), 'success');
+            showFieldMessage('txt_email', t('email_help_valid'), 'success');
         } else if (status === 'FAILED') {
-            setHelper('txt_email', t('email_help_invalid'), 'error');
+            showFieldMessage('txt_email', t('email_help_invalid'), 'error');
         } else {
-            setHelper('txt_email', t('email_help_empty'), 'error');
+            showFieldMessage('txt_email', t('email_help_empty'), 'error');
         }
 
         return status;
@@ -224,16 +261,16 @@ window.set_main = function () {
         const shouldShow = force || touched || String(passwordEl.value || '').trim() !== '';
 
         if (!shouldShow) {
-            setHelper('txt_password', '', 'info');
+            clearFieldMessage('txt_password');
             return status;
         }
 
         if (status === 'SUCCESS') {
-            setHelper('txt_password', t('password_help_valid'), 'success');
+            showFieldMessage('txt_password', t('password_help_valid'), 'success');
         } else if (status === 'FAILED') {
-            setHelper('txt_password', t('password_help_short'), 'error');
+            showFieldMessage('txt_password', t('password_help_short'), 'error');
         } else {
-            setHelper('txt_password', t('password_help_empty'), 'error');
+            showFieldMessage('txt_password', t('password_help_empty'), 'error');
         }
 
         return status;
@@ -242,7 +279,7 @@ window.set_main = function () {
     if (emailEl) {
         emailEl.addEventListener('input', function () {
             emailEl.dataset.touched = '1';
-            clearStaleErrors();
+            clearTransientErrors();
             updateEmailHelper(false);
         });
         emailEl.addEventListener('blur', function () {
@@ -254,7 +291,7 @@ window.set_main = function () {
     if (passwordEl) {
         passwordEl.addEventListener('input', function () {
             passwordEl.dataset.touched = '1';
-            clearStaleErrors();
+            clearTransientErrors();
             updatePasswordHelper(false);
         });
         passwordEl.addEventListener('blur', function () {
@@ -264,8 +301,8 @@ window.set_main = function () {
     }
 
     app.bindSubmit('account_login_form', async function () {
-        app.clearFieldErrors();
-        app.setNotice('', 'info');
+        clearTransientErrors();
+        clearLocalFeedback();
 
         if (emailEl) emailEl.dataset.touched = '1';
         if (passwordEl) passwordEl.dataset.touched = '1';
@@ -277,14 +314,8 @@ window.set_main = function () {
         const emailStatus = updateEmailHelper(true);
         const passwordStatus = updatePasswordHelper(true);
 
-        if (emailStatus !== 'SUCCESS') {
-            app.setFieldError('txt_email', emailStatus === 'NOT EXIST' ? t('email_help_empty') : t('invalid_email'));
-            return;
-        }
-        if (passwordStatus !== 'SUCCESS') {
-            app.setFieldError('txt_password', passwordStatus === 'NOT EXIST' ? t('password_required') : t('password_help_short'));
-            return;
-        }
+        if (emailStatus !== 'SUCCESS') return;
+        if (passwordStatus !== 'SUCCESS') return;
 
         try {
             app.setButtonLoading(button, t('signing_in'), true);
@@ -294,23 +325,21 @@ window.set_main = function () {
             );
 
             if (response.checker === 'SUCCESS') {
-                app.setNotice(t('login_success'), 'success');
+                if (typeof app.setNotice === 'function') app.setNotice(t('login_success'), 'success');
                 const targetUrl = getReturnToUrl();
                 try { sessionStorage.removeItem(RETURN_TO_KEY); } catch (_) {}
                 app.redirect(targetUrl);
                 return;
             }
             if (response.checker === 'WRONGPASSWORD') {
-                setHelper('txt_password', t('wrong_password'), 'error');
-                app.setFieldError('txt_password', t('wrong_password'));
+                showFieldMessage('txt_password', t('wrong_password'), 'error');
                 return;
             }
             if (response.checker === 'NOTEXIST') {
-                setHelper('txt_email', t('not_exist'), 'error');
-                app.setFieldError('txt_email', t('not_exist'));
+                showFieldMessage('txt_email', t('not_exist'), 'error');
                 return;
             }
-            app.setNotice(response.checker || t('generic_error'), 'error');
+            if (typeof app.setNotice === 'function') app.setNotice(response.checker || t('generic_error'), 'error');
         } catch (error) {
             app.handleRequestError(error);
         } finally {
