@@ -1,0 +1,55 @@
+(function () {
+    'use strict';
+    window.StatKISSAccountMyinfoConnectionsMessages = {
+        en: {
+            myinfo_connections_title: 'Linked accounts',
+            myinfo_connections_desc: 'Connect Google to your current StatKISS account without creating a duplicate user.',
+            myinfo_connections_google_card: 'Google connection',
+            myinfo_connections_google_linked: 'A Google account is already linked to this StatKISS account.',
+            myinfo_connections_google_not_linked: 'No Google account is linked yet.',
+            myinfo_connections_google_action: 'Connect Google account',
+            myinfo_connections_google_verified: 'Verified email',
+            myinfo_connections_google_not_verified: 'Unverified email',
+            myinfo_connections_local_card: 'Current StatKISS login',
+            myinfo_connections_local_email: 'Account email',
+            myinfo_connections_local_password: 'Password login',
+            myinfo_connections_password_enabled: 'Enabled',
+            myinfo_connections_password_disabled: 'Not set',
+            myinfo_connections_help: 'If the Google account email already belongs to an existing StatKISS account, StatKISS links it instead of counting a second signup.',
+            google_link_success: 'Google has been linked to your current StatKISS account.',
+            google_already_linked: 'This account is already linked with Google.',
+            google_link_conflict: 'That Google account is already linked to a different StatKISS account.',
+            google_link_signin_required: 'Please sign in to StatKISS first, then try linking Google again.',
+            google_disabled: 'Google sign-in is not configured yet. Please contact the administrator.',
+            google_access_denied: 'Google sign-in was cancelled.',
+            google_auth_failed: 'Google sign-in failed. Please try again.',
+            google_email_not_verified: 'Your Google account must have a verified email address to continue.',
+            google_ambiguous_email: 'Multiple StatKISS accounts use this email. Please contact support.'
+        },
+        ko: {
+            myinfo_connections_title: '계정 연동',
+            myinfo_connections_desc: '중복 사용자를 만들지 않고 현재 StatKISS 계정에 Google을 연결합니다.',
+            myinfo_connections_google_card: 'Google 연동',
+            myinfo_connections_google_linked: '이 StatKISS 계정에는 이미 Google 계정이 연결되어 있습니다.',
+            myinfo_connections_google_not_linked: '아직 연결된 Google 계정이 없습니다.',
+            myinfo_connections_google_action: 'Google 계정 연결',
+            myinfo_connections_google_verified: '이메일 검증됨',
+            myinfo_connections_google_not_verified: '이메일 미검증',
+            myinfo_connections_local_card: '현재 StatKISS 로그인',
+            myinfo_connections_local_email: '계정 이메일',
+            myinfo_connections_local_password: '비밀번호 로그인',
+            myinfo_connections_password_enabled: '사용 가능',
+            myinfo_connections_password_disabled: '설정되지 않음',
+            myinfo_connections_help: 'Google 계정 이메일이 기존 StatKISS 계정과 같으면 새 가입으로 중복 집계하지 않고 기존 계정에 연동합니다.',
+            google_link_success: '현재 StatKISS 계정에 Google이 연결되었습니다.',
+            google_already_linked: '이 계정은 이미 Google과 연동되어 있습니다.',
+            google_link_conflict: '해당 Google 계정은 이미 다른 StatKISS 계정과 연동되어 있습니다.',
+            google_link_signin_required: '먼저 StatKISS에 로그인한 뒤 다시 Google 연동을 시도해주세요.',
+            google_disabled: 'Google 로그인이 아직 설정되지 않았습니다. 관리자에게 문의해주세요.',
+            google_access_denied: 'Google 로그인이 취소되었습니다.',
+            google_auth_failed: 'Google 로그인에 실패했습니다. 다시 시도해주세요.',
+            google_email_not_verified: '계속하려면 Google 계정의 이메일이 검증되어 있어야 합니다.',
+            google_ambiguous_email: '같은 이메일을 사용하는 StatKISS 계정이 여러 개입니다. 관리자에게 문의해주세요.'
+        }
+    };
+})();
