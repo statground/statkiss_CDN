@@ -483,7 +483,7 @@ let check_member_pending_student = "NO"
 let class_member_active = "flex flex-row justify-center items-center text-xs font-light text-gray-700 w-fit px-2 py-1 rounded-lg border border-gray-700"
 let class_member_deactive = "flex flex-row justify-center items-center text-xs font-light text-gray-300 w-fit px-2 py-1 rounded-lg border border-gray-300 bg-white"
 
-function Div_member_list_skeleton() {
+function Div_member_list_skeleton_legacy() {
 	let class_skeleton = "flex flex-col bg-gray-300 rounded-lg w-full h-12 border border-gray-500 shadow-sm p-2"
 	return (
 		<div class="flex flex-col space-y-2 animate-pulse">
@@ -496,7 +496,7 @@ function Div_member_list_skeleton() {
 	)
 }
 
-function Div_member_count_skeleton(props) {
+function Div_member_count_skeleton_legacy(props) {
 	return (
 		<div class="flex flex-row w-full justify-between items-center">
 			<p>
@@ -510,7 +510,7 @@ function Div_member_count_skeleton(props) {
 	)
 }
 
-function Div_btn_search() {
+function Div_btn_search_legacy() {
     return (
         <button type="button"
                 onClick={() => click_btn_search()}
@@ -520,7 +520,7 @@ function Div_btn_search() {
     )
 }
 
-function Div_btn_search_loading() {
+function Div_btn_search_loading_legacy() {
     return (
         <button type="button"
                 class="py-1.5 px-5 text-white bg-blue-700 font-medium rounded-lg text-sm w-full md:w-auto text-center cursor-not-allowed hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -556,7 +556,7 @@ function Div_btn_change_membership_loading(props) {
     )
 }
 
-function Div_member_list_membership(props) {
+function Div_member_list_membership_legacy(props) {
     const renderRole = (roleName, bgClass) => {
         const isActive = props.current_role == roleName
         const className = isActive
@@ -601,7 +601,7 @@ function Div_member_list_membership(props) {
     )
 }
 
-function Div_member_list_membership_addon(props) {
+function Div_member_list_membership_addon_legacy(props) {
     return (
         <div class="w-full">
             <div class="flex flex-row justify-center items-center w-full space-x-2">
@@ -631,7 +631,7 @@ function Div_member_list_membership_addon(props) {
     )
 }
 
-function Div_member_list(props) {
+function Div_member_list_legacy(props) {
     let classCard = 'flex flex-row justify-center items-center text-xs font-light bg-gray-100 px-2 py-1 rounded-lg'
 
     const memberList = Object.keys(props.data).map((article) =>
@@ -715,7 +715,7 @@ function Div_member_list(props) {
     )
 }
 
-function Div_member_count(props) {
+function Div_member_count_legacy(props) {
     const formattedCount = props.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
     return (
@@ -736,7 +736,7 @@ function Div_member_count(props) {
     )
 }
 
-async function click_btn_search() {
+async function click_btn_search_legacy() {
 	get_member_list("search")
 }
 
@@ -799,7 +799,7 @@ async function click_btn_change_membership_addon(uuid_user, sel_membership, curr
     }
 }
 
-async function click_btn_like_change_password(email) {
+async function click_btn_like_change_password_legacy(email) {
 	const request_data = new FormData();
 	request_data.append('email', email);      // 이메일
 
@@ -821,6 +821,7 @@ async function get_member_list(mode) {
 
 	if (mode == "init") { 
 		page_num = 1 
+		gv_member_list_pages = {}
 		ReactDOM.render(<Div_member_list_skeleton />, document.getElementById("div_member_list"))
 		ReactDOM.render(<Div_member_count_skeleton />, document.getElementById("div_member_count"))
 
@@ -834,6 +835,7 @@ async function get_member_list(mode) {
 		document.getElementById("check_member_addon_kssjoint").checked = true
 	} else if (mode == "search") { 
 		page_num = 1 
+		gv_member_list_pages = {}
 		ReactDOM.render(<Div_member_list_skeleton />, document.getElementById("div_member_list"))
 		ReactDOM.render(<Div_member_count_skeleton />, document.getElementById("div_member_count"))
 	} else {
@@ -887,6 +889,7 @@ async function get_member_list(mode) {
 						.then(res=> { return res; });
 
 	member_counter = data["count"].cnt
+	gv_member_list_pages[page_num] = data["list"]
 
 	if (mode == "init" || mode == "search") {
 		ReactDOM.render(<Div_member_list data={data["list"]} />, document.getElementById("div_member_list"))
@@ -934,6 +937,9 @@ let gv_member_addon_chart = null
 let gv_member_signup_chart = null
 let gv_member_period = 'monthly'
 let gv_member_scroll_handler = null
+let gv_member_list_pages = {}
+let gv_member_theme_observer_installed = false
+let gv_member_last_theme_mode = null
 
 function member_patch_safe_number(value) {
     const num = Number(value)
@@ -985,7 +991,42 @@ function member_patch_is_rtl() {
 
 function member_patch_get_theme_mode() {
     if (typeof detect_admin_shell_theme_mode === 'function') {
-        return detect_admin_shell_theme_mode()
+        const detected = detect_admin_shell_theme_mode()
+        if (detected === 'dark' || detected === 'light') {
+            return detected
+        }
+    }
+
+    const candidates = [
+        document.documentElement,
+        document.body,
+        document.getElementById('div_main'),
+        document.getElementById('div_admin_menu'),
+        document.getElementById('div_content')
+    ].filter(Boolean)
+
+    for (const node of candidates) {
+        const classNames = typeof node.className === 'string'
+            ? node.className.toLowerCase()
+            : (node.classList ? Array.from(node.classList).join(' ').toLowerCase() : '')
+
+        if (/(^|\s)(dark|dark-mode|theme-dark)(\s|$)/.test(classNames) || classNames.includes('dark:')) {
+            return 'dark'
+        }
+
+        const attrValues = [
+            node.getAttribute && node.getAttribute('data-theme'),
+            node.getAttribute && node.getAttribute('data-color-mode'),
+            node.getAttribute && node.getAttribute('data-bs-theme'),
+            node.getAttribute && node.getAttribute('theme'),
+            node.dataset && node.dataset.theme,
+            node.dataset && node.dataset.colorMode,
+            node.dataset && node.dataset.bsTheme,
+        ].filter(Boolean).map(v => String(v).toLowerCase())
+
+        if (attrValues.some(v => v === 'dark' || v === 'theme-dark')) {
+            return 'dark'
+        }
     }
 
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -1973,7 +2014,7 @@ function get_counter_graph(type) {
     }
 }
 
-function Div_member_search_filter() {
+function Div_member_search_filter_legacy() {
     const checkboxItem = (id, label) => (
         <div class="flex items-center ps-3">
             <input id={id} type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
@@ -2083,7 +2124,7 @@ async function click_btn_pending_student(email) {
     get_member_list('search')
 }
 
-function set_content() {
+function set_content_legacy() {
     function Div_content() {
         return (
             <div class="flex flex-col w-full space-y-8">
@@ -2123,7 +2164,7 @@ function set_content() {
     window.addEventListener('scroll', gv_member_scroll_handler)
 }
 
-function set_main() {
+function set_main_legacy() {
     render_admin_shell('members', set_content)
 }
 
@@ -2251,13 +2292,6 @@ function member_patch_build_mode_href(mode) {
     return admin_build_url('/admin/members/')
 }
 
-function member_patch_clear_scroll_handler() {
-    if (gv_member_scroll_handler != null) {
-        window.removeEventListener('scroll', gv_member_scroll_handler)
-        gv_member_scroll_handler = null
-    }
-}
-
 function member_management_get_palette(themeMode) {
     if (themeMode === 'dark') {
         return {
@@ -2292,7 +2326,10 @@ function member_management_get_palette(themeMode) {
             dangerText: 'text-rose-300',
             loadingCard: 'rounded-2xl border border-slate-700 bg-slate-900/70',
             spinnerTrack: '#334155',
-            spinnerFill: 'currentColor'
+            spinnerFill: 'currentColor',
+            skeletonBase: 'bg-slate-800',
+            skeletonSoft: 'bg-slate-800/70',
+            skeletonStrong: 'bg-slate-700'
         }
     }
 
@@ -2328,7 +2365,10 @@ function member_management_get_palette(themeMode) {
         dangerText: 'text-rose-600',
         loadingCard: 'rounded-2xl border border-slate-200 bg-slate-50',
         spinnerTrack: '#E5E7EB',
-        spinnerFill: 'currentColor'
+        spinnerFill: 'currentColor',
+        skeletonBase: 'bg-slate-200',
+        skeletonSoft: 'bg-slate-200/70',
+        skeletonStrong: 'bg-slate-400/80'
     }
 }
 
@@ -2395,25 +2435,25 @@ function Div_member_list_skeleton() {
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                             <div class="space-y-2">
-                                <div class="h-4 w-40 rounded-full bg-slate-300"></div>
-                                <div class="h-3 w-56 rounded-full bg-slate-200"></div>
+                                <div class={'h-4 w-40 rounded-full ' + palette.skeletonStrong}></div>
+                                <div class={'h-3 w-56 rounded-full ' + palette.skeletonBase}></div>
                             </div>
-                            <div class="h-10 w-40 rounded-xl bg-slate-200"></div>
+                            <div class={'h-10 w-40 rounded-xl ' + palette.skeletonBase}></div>
                         </div>
                         <div class="grid grid-cols-1 gap-4 xl:grid-cols-5">
-                            <div class="xl:col-span-3 rounded-2xl bg-slate-200/70 p-4">
-                                <div class="h-4 w-32 rounded-full bg-slate-300 mb-4"></div>
+                            <div class={'xl:col-span-3 rounded-2xl p-4 ' + palette.skeletonSoft}>
+                                <div class={'h-4 w-32 rounded-full mb-4 ' + palette.skeletonStrong}></div>
                                 <div class="grid grid-cols-2 gap-2 lg:grid-cols-3">
-                                    {[0, 1, 2, 3, 4, 5].map(chip => <div key={chip} class="h-9 rounded-full bg-slate-300/80"></div>)}
+                                    {[0, 1, 2, 3, 4, 5].map(chip => <div key={chip} class={'h-9 rounded-full ' + palette.skeletonStrong}></div>)}
                                 </div>
                             </div>
-                            <div class="xl:col-span-2 rounded-2xl bg-slate-200/70 p-4">
-                                <div class="h-4 w-32 rounded-full bg-slate-300 mb-4"></div>
-                                <div class="h-9 w-40 rounded-full bg-slate-300/80"></div>
+                            <div class={'xl:col-span-2 rounded-2xl p-4 ' + palette.skeletonSoft}>
+                                <div class={'h-4 w-32 rounded-full mb-4 ' + palette.skeletonStrong}></div>
+                                <div class={'h-9 w-40 rounded-full ' + palette.skeletonStrong}></div>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            {[0, 1, 2].map(meta => <div key={meta} class="h-8 w-32 rounded-full bg-slate-200"></div>)}
+                            {[0, 1, 2].map(meta => <div key={meta} class={'h-8 w-32 rounded-full ' + palette.skeletonBase}></div>)}
                         </div>
                     </div>
                 </div>
@@ -2428,11 +2468,11 @@ function Div_member_count_skeleton() {
         <div class={palette.panel + ' animate-pulse'}>
             <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div class="space-y-3">
-                    <div class="h-3 w-36 rounded-full bg-slate-200"></div>
-                    <div class="h-10 w-28 rounded-full bg-slate-300"></div>
-                    <div class="h-3 w-64 rounded-full bg-slate-200"></div>
+                    <div class={'h-3 w-36 rounded-full ' + palette.skeletonBase}></div>
+                    <div class={'h-10 w-28 rounded-full ' + palette.skeletonStrong}></div>
+                    <div class={'h-3 w-64 rounded-full ' + palette.skeletonBase}></div>
                 </div>
-                <div class="h-12 w-44 rounded-xl bg-slate-200"></div>
+                <div class={'h-12 w-44 rounded-xl ' + palette.skeletonBase}></div>
             </div>
         </div>
     )
@@ -2770,38 +2810,6 @@ async function click_btn_search() {
     }
 }
 
-function click_btn_reset_filters() {
-    if (document.getElementById('txt_name')) {
-        document.getElementById('txt_name').value = ''
-    }
-    if (document.getElementById('txt_email')) {
-        document.getElementById('txt_email').value = ''
-    }
-
-    ;[
-        'check_member_admin',
-        'check_member_lifetime',
-        'check_member_regular',
-        'check_member_spouse',
-        'check_member_student',
-        'check_member_member',
-        'check_member_addon_none',
-        'check_member_addon_kssjoint'
-    ].forEach(id => {
-        const target = document.getElementById(id)
-        if (target) {
-            target.checked = true
-        }
-    })
-
-    const pendingTarget = document.getElementById('check_member_pending_student')
-    if (pendingTarget) {
-        pendingTarget.checked = false
-    }
-
-    click_btn_search()
-}
-
 async function click_btn_like_change_password(email) {
     const request_data = new FormData()
     request_data.append('email', email)
@@ -2832,7 +2840,374 @@ async function click_btn_like_change_password(email) {
     }
 }
 
+
+function member_patch_capture_filter_state() {
+    const ids = [
+        'txt_name',
+        'txt_email',
+        'check_member_admin',
+        'check_member_lifetime',
+        'check_member_regular',
+        'check_member_spouse',
+        'check_member_student',
+        'check_member_member',
+        'check_member_addon_none',
+        'check_member_addon_kssjoint',
+        'check_member_pending_student'
+    ]
+
+    const state = {}
+    ids.forEach(id => {
+        const el = document.getElementById(id)
+        if (!el) {
+            return
+        }
+        state[id] = el.type === 'checkbox' ? !!el.checked : el.value
+    })
+    return state
+}
+
+function member_patch_restore_filter_state(state) {
+    if (!state) {
+        return
+    }
+    Object.keys(state).forEach(id => {
+        const el = document.getElementById(id)
+        if (!el) {
+            return
+        }
+        if (el.type === 'checkbox') {
+            el.checked = !!state[id]
+        } else {
+            el.value = state[id] || ''
+        }
+    })
+}
+
+function member_patch_get_cached_member_rows() {
+    return Object.keys(gv_member_list_pages)
+        .map(key => Number(key))
+        .sort((a, b) => a - b)
+        .reduce((acc, key) => {
+            const rows = gv_member_list_pages[key]
+            if (Array.isArray(rows)) {
+                return acc.concat(rows)
+            }
+            return acc.concat(Object.values(rows || {}))
+        }, [])
+}
+
+function member_patch_refresh_theme_ui() {
+    const activeMode = member_patch_get_active_mode()
+    const filterState = member_patch_capture_filter_state()
+
+    set_content()
+
+    if (activeMode === 'management') {
+        member_patch_restore_filter_state(filterState)
+        member_patch_rerender_management_from_cache()
+        return
+    }
+
+    render_member_dashboard(false)
+}
+
+function member_patch_install_theme_listener() {
+    if (gv_member_theme_observer_installed) {
+        return
+    }
+
+    gv_member_theme_observer_installed = true
+    gv_member_last_theme_mode = member_patch_get_theme_mode()
+
+    const refreshThemeMode = () => {
+        const nextMode = member_patch_get_theme_mode()
+        if (nextMode === gv_member_last_theme_mode) {
+            return
+        }
+        gv_member_last_theme_mode = nextMode
+        member_patch_refresh_theme_ui()
+    }
+
+    const observer = new MutationObserver(refreshThemeMode)
+    ;[
+        document.documentElement,
+        document.body,
+        document.getElementById('div_main'),
+        document.getElementById('div_admin_menu'),
+        document.getElementById('div_content')
+    ].filter(Boolean).forEach(target => {
+        observer.observe(target, {
+            attributes: true,
+            attributeFilter: ['class', 'style', 'data-theme', 'data-color-mode', 'data-bs-theme', 'theme']
+        })
+    })
+
+    const media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
+    if (media) {
+        if (media.addEventListener) {
+            media.addEventListener('change', refreshThemeMode)
+        } else if (media.addListener) {
+            media.addListener(refreshThemeMode)
+        }
+    }
+}
+
+function set_main() {
+    render_admin_shell('members', set_content)
+}
+
+
+// ===== Member management performance patch 2026-03-28 =====
+let gv_member_next_cursor_joined_at = ''
+let gv_member_next_cursor_uuid = ''
+let gv_member_has_next = false
+let gv_member_fetch_controller = null
+let gv_member_request_serial = 0
+let gv_member_active_request_id = 0
+let gv_member_intersection_observer = null
+let gv_member_filter_state = null
+
+function member_patch_clear_member_list_observer() {
+    if (gv_member_intersection_observer != null) {
+        gv_member_intersection_observer.disconnect()
+        gv_member_intersection_observer = null
+    }
+}
+
+function member_patch_clear_scroll_handler() {
+    member_patch_clear_member_list_observer()
+    if (gv_member_scroll_handler != null) {
+        window.removeEventListener('scroll', gv_member_scroll_handler)
+        gv_member_scroll_handler = null
+    }
+}
+
+function member_patch_abort_member_fetch() {
+    if (gv_member_fetch_controller != null) {
+        try { gv_member_fetch_controller.abort() } catch (error) {}
+        gv_member_fetch_controller = null
+    }
+}
+
+function member_patch_apply_default_member_filters() {
+    ;['check_member_admin','check_member_lifetime','check_member_regular','check_member_spouse','check_member_student','check_member_member','check_member_addon_none','check_member_addon_kssjoint'].forEach(id => {
+        const target = document.getElementById(id)
+        if (target) { target.checked = true }
+    })
+    const pendingTarget = document.getElementById('check_member_pending_student')
+    if (pendingTarget) { pendingTarget.checked = false }
+}
+
+function member_patch_read_member_filter_state_from_dom() {
+    return {
+        txt_name: document.getElementById('txt_name') ? document.getElementById('txt_name').value.trim() : '',
+        txt_email: document.getElementById('txt_email') ? document.getElementById('txt_email').value.trim() : '',
+        check_member_admin: !!(document.getElementById('check_member_admin') && document.getElementById('check_member_admin').checked),
+        check_member_lifetime: !!(document.getElementById('check_member_lifetime') && document.getElementById('check_member_lifetime').checked),
+        check_member_regular: !!(document.getElementById('check_member_regular') && document.getElementById('check_member_regular').checked),
+        check_member_spouse: !!(document.getElementById('check_member_spouse') && document.getElementById('check_member_spouse').checked),
+        check_member_student: !!(document.getElementById('check_member_student') && document.getElementById('check_member_student').checked),
+        check_member_member: !!(document.getElementById('check_member_member') && document.getElementById('check_member_member').checked),
+        check_member_addon_none: !!(document.getElementById('check_member_addon_none') && document.getElementById('check_member_addon_none').checked),
+        check_member_addon_kssjoint: !!(document.getElementById('check_member_addon_kssjoint') && document.getElementById('check_member_addon_kssjoint').checked),
+        check_member_pending_student: !!(document.getElementById('check_member_pending_student') && document.getElementById('check_member_pending_student').checked),
+    }
+}
+
+function member_patch_clone_filter_state(state) {
+    return {
+        txt_name: state && state.txt_name ? String(state.txt_name) : '',
+        txt_email: state && state.txt_email ? String(state.txt_email) : '',
+        check_member_admin: !!(state && state.check_member_admin),
+        check_member_lifetime: !!(state && state.check_member_lifetime),
+        check_member_regular: !!(state && state.check_member_regular),
+        check_member_spouse: !!(state && state.check_member_spouse),
+        check_member_student: !!(state && state.check_member_student),
+        check_member_member: !!(state && state.check_member_member),
+        check_member_addon_none: !!(state && state.check_member_addon_none),
+        check_member_addon_kssjoint: !!(state && state.check_member_addon_kssjoint),
+        check_member_pending_student: !!(state && state.check_member_pending_student),
+    }
+}
+
+function member_patch_apply_filter_state_to_form_data(formData, filterState) {
+    const state = member_patch_clone_filter_state(filterState)
+    formData.append('txt_name', state.txt_name)
+    formData.append('txt_email', state.txt_email)
+    formData.append('check_member_admin', state.check_member_admin ? 'YES' : 'NO')
+    formData.append('check_member_lifetime', state.check_member_lifetime ? 'YES' : 'NO')
+    formData.append('check_member_regular', state.check_member_regular ? 'YES' : 'NO')
+    formData.append('check_member_spouse', state.check_member_spouse ? 'YES' : 'NO')
+    formData.append('check_member_student', state.check_member_student ? 'YES' : 'NO')
+    formData.append('check_member_member', state.check_member_member ? 'YES' : 'NO')
+    formData.append('check_member_addon_none', state.check_member_addon_none ? 'YES' : 'NO')
+    formData.append('check_member_addon_kssjoint', state.check_member_addon_kssjoint ? 'YES' : 'NO')
+    formData.append('check_member_pending_student', state.check_member_pending_student ? 'YES' : 'NO')
+}
+
+function member_patch_attach_member_list_observer() {
+    member_patch_clear_member_list_observer()
+    if (!gv_member_has_next || typeof IntersectionObserver === 'undefined') { return }
+    const sentinel = document.getElementById('div_member_list_' + (page_num + 1).toString())
+    if (!sentinel) { return }
+    gv_member_intersection_observer = new IntersectionObserver(entries => {
+        const entry = entries && entries[0] ? entries[0] : null
+        if (!entry || !entry.isIntersecting) { return }
+        if (toggle_page || !gv_member_has_next) { return }
+        get_member_list('next')
+    }, { root: null, rootMargin: '700px 0px', threshold: 0 })
+    gv_member_intersection_observer.observe(sentinel)
+}
+
+async function get_member_list(mode) {
+    const isInitialMode = mode === 'init' || mode === 'search'
+    if (!isInitialMode && (toggle_page || !gv_member_has_next)) { return }
+
+    if (mode === 'init') {
+        page_num = 1
+        member_counter = 0
+        gv_member_list_pages = {}
+        gv_member_next_cursor_joined_at = ''
+        gv_member_next_cursor_uuid = ''
+        gv_member_has_next = false
+        member_patch_apply_default_member_filters()
+        gv_member_filter_state = member_patch_read_member_filter_state_from_dom()
+        ReactDOM.render(<Div_member_list_skeleton />, document.getElementById('div_member_list'))
+        ReactDOM.render(<Div_member_count_skeleton />, document.getElementById('div_member_count'))
+    } else if (mode === 'search') {
+        page_num = 1
+        member_counter = 0
+        gv_member_list_pages = {}
+        gv_member_next_cursor_joined_at = ''
+        gv_member_next_cursor_uuid = ''
+        gv_member_has_next = false
+        gv_member_filter_state = member_patch_read_member_filter_state_from_dom()
+        ReactDOM.render(<Div_member_list_skeleton />, document.getElementById('div_member_list'))
+        ReactDOM.render(<Div_member_count_skeleton />, document.getElementById('div_member_count'))
+    } else {
+        if (!gv_member_filter_state) { gv_member_filter_state = member_patch_read_member_filter_state_from_dom() }
+        page_num += 1
+        const nextTarget = document.getElementById('div_member_list_' + page_num.toString())
+        if (nextTarget) { ReactDOM.render(<Div_member_list_skeleton />, nextTarget) }
+    }
+
+    const filterState = member_patch_clone_filter_state(gv_member_filter_state || member_patch_read_member_filter_state_from_dom())
+    gv_member_filter_state = filterState
+
+    member_patch_abort_member_fetch()
+    member_patch_clear_member_list_observer()
+
+    toggle_page = true
+    const controller = new AbortController()
+    gv_member_fetch_controller = controller
+    const requestId = ++gv_member_request_serial
+    gv_member_active_request_id = requestId
+
+    const request_data = new FormData()
+    request_data.append('page', page_num)
+    request_data.append('include_count', isInitialMode ? 'YES' : 'NO')
+    member_patch_apply_filter_state_to_form_data(request_data, filterState)
+    if (!isInitialMode) {
+        request_data.append('cursor_joined_at', gv_member_next_cursor_joined_at || '')
+        request_data.append('cursor_uuid', gv_member_next_cursor_uuid || '')
+    }
+
+    try {
+        const data = await member_patch_fetch_json(member_patch_build_url('/admin/ajax_get_member_list/'), {
+            method: 'post',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: request_data,
+            signal: controller.signal,
+        })
+        if (requestId !== gv_member_active_request_id) { return }
+
+        const rows = Array.isArray(data.list) ? data.list : Object.values(data.list || {})
+        gv_member_has_next = !!data.has_next
+        gv_member_next_cursor_joined_at = data.next_cursor_joined_at || ''
+        gv_member_next_cursor_uuid = data.next_cursor_uuid || ''
+
+        if (isInitialMode) {
+            gv_member_list_pages = {}
+            gv_member_list_pages[1] = rows
+            if (data.count && typeof data.count.cnt !== 'undefined' && data.count.cnt !== null) {
+                member_counter = member_patch_safe_number(data.count.cnt)
+            }
+            ReactDOM.render(<Div_member_list data={rows} />, document.getElementById('div_member_list'))
+            ReactDOM.render(<Div_member_count count={member_counter} />, document.getElementById('div_member_count'))
+        } else {
+            const target = document.getElementById('div_member_list_' + page_num.toString())
+            if (!rows.length) {
+                if (target) { target.innerHTML = '' }
+                page_num = Math.max(1, page_num - 1)
+                gv_member_has_next = false
+                gv_member_next_cursor_joined_at = ''
+                gv_member_next_cursor_uuid = ''
+            } else {
+                gv_member_list_pages[page_num] = rows
+                if (target) { ReactDOM.render(<Div_member_list data={rows} />, target) }
+            }
+        }
+
+        member_patch_attach_member_list_observer()
+    } catch (error) {
+        if (error && error.name === 'AbortError') { return }
+        console.error('get_member_list failed', error)
+        if (isInitialMode) {
+            ReactDOM.render(<Div_member_list data={[]} />, document.getElementById('div_member_list'))
+            ReactDOM.render(<Div_member_count count={member_counter} />, document.getElementById('div_member_count'))
+        }
+    } finally {
+        if (requestId === gv_member_active_request_id) {
+            toggle_page = false
+            gv_member_fetch_controller = null
+        }
+    }
+}
+
+async function click_btn_search() {
+    const target = document.getElementById('div_btn_search')
+    if (target) { ReactDOM.render(<Div_btn_search_loading />, target) }
+    try { await get_member_list('search') } finally { if (target) { ReactDOM.render(<Div_btn_search />, target) } }
+}
+
+function click_btn_reset_filters() {
+    member_patch_abort_member_fetch()
+    if (document.getElementById('txt_name')) { document.getElementById('txt_name').value = '' }
+    if (document.getElementById('txt_email')) { document.getElementById('txt_email').value = '' }
+    member_patch_apply_default_member_filters()
+    click_btn_search()
+}
+
+function member_patch_rerender_management_from_cache() {
+    const filterTarget = document.getElementById('div_member_search_filter')
+    const countTarget = document.getElementById('div_member_count')
+    const listTarget = document.getElementById('div_member_list')
+    page_num = Math.max(1, Object.keys(gv_member_list_pages).length || 1)
+    if (filterTarget) {
+        ReactDOM.render(<Div_member_search_filter />, filterTarget)
+        if (gv_member_filter_state) { member_patch_restore_filter_state(gv_member_filter_state) }
+    }
+    if (countTarget) {
+        if (member_counter > 0 || Object.keys(gv_member_list_pages).length > 0) {
+            ReactDOM.render(<Div_member_count count={member_counter} />, countTarget)
+        } else {
+            ReactDOM.render(<Div_member_count_skeleton />, countTarget)
+        }
+    }
+    if (listTarget) {
+        const rows = member_patch_get_cached_member_rows()
+        if (rows.length > 0) {
+            ReactDOM.render(<Div_member_list data={rows} />, listTarget)
+        } else {
+            ReactDOM.render(<Div_member_list_skeleton />, listTarget)
+        }
+    }
+    member_patch_attach_member_list_observer()
+}
+
 function set_content() {
+    member_patch_install_theme_listener()
     const activeMode = member_patch_get_active_mode()
     member_patch_clear_scroll_handler()
     member_patch_dispose_charts()
@@ -2869,16 +3244,20 @@ function set_content() {
         ReactDOM.render(<Div_member_management_page />, document.getElementById('div_content'))
         ReactDOM.render(<Div_member_search_filter />, document.getElementById('div_member_search_filter'))
 
-        get_member_list('init')
-
-        gv_member_scroll_handler = () => {
-            const isScrollEnded = window.innerHeight + window.scrollY + 1 >= document.body.offsetHeight
-            if (isScrollEnded && !toggle_page && ((page_num * 30) < member_counter)) {
-                get_member_list('next')
-            }
+        if (gv_member_filter_state && Object.keys(gv_member_list_pages).length > 0) {
+            member_patch_restore_filter_state(gv_member_filter_state)
+            member_patch_rerender_management_from_cache()
+        } else {
+            get_member_list('init')
         }
 
-        window.addEventListener('scroll', gv_member_scroll_handler)
+        if (typeof IntersectionObserver === 'undefined') {
+            gv_member_scroll_handler = () => {
+                const isScrollEnded = window.innerHeight + window.scrollY + 1 >= document.body.offsetHeight
+                if (isScrollEnded && !toggle_page && gv_member_has_next) { get_member_list('next') }
+            }
+            window.addEventListener('scroll', gv_member_scroll_handler)
+        }
         return
     }
 
@@ -2886,6 +3265,611 @@ function set_content() {
     get_member_summary()
 }
 
-function set_main() {
-    render_admin_shell('members', set_content)
-}
+
+// ===== Integrated member management patch 2026-03-29 =====
+(function () {
+    const MEMBER_PATCH_LOCALES = [
+        'en','ko','ja','zh-Hans','zh-Hant','es','fr','de','pt-BR','ru','id','vi','th','ms','fil','hi','ar','it','nl','pl','sv','tr','uk'
+    ]
+
+    const EXPIRY_EN = {
+        'members.expiry.never': 'Lifetime — never expires',
+        'members.expiry.dialog.title.role': 'Set membership expiry',
+        'members.expiry.dialog.title.addon': 'Set add-on expiry',
+        'members.expiry.dialog.title.pending_student': 'Approve Student Member',
+        'members.expiry.dialog.description.role': 'Pick an expiry date from the calendar or type it manually.',
+        'members.expiry.dialog.description.addon': 'Pick an add-on expiry date from the calendar or type it manually.',
+        'members.expiry.dialog.description.pending_student': 'Choose the Student Member expiry date for this approval.',
+        'members.expiry.dialog.input_calendar': 'Calendar',
+        'members.expiry.dialog.input_text': 'Date text',
+        'members.expiry.dialog.placeholder': 'YYYY-MM-DD',
+        'members.expiry.dialog.default_hint': 'Default: one year from today',
+        'members.expiry.dialog.confirm': 'Confirm',
+        'members.expiry.dialog.cancel': 'Cancel',
+        'members.expiry.dialog.invalid_date': 'Please enter a valid date in YYYY-MM-DD format.',
+        'members.count.pending_student': '{count} pending Student Member request(s)',
+        'members.pending.review': 'Review pending requests',
+        'members.pending.review_hint': 'Pending Student Member requests are waiting for admin approval.',
+        'members.confirm.reject_student': 'Do you want to reject this pending Student Member request?'
+    }
+    const EXPIRY_KO = {
+        'members.expiry.never': '평생 만료되지 않음',
+        'members.expiry.dialog.title.role': '멤버십 만료일 설정',
+        'members.expiry.dialog.title.addon': '부가 멤버십 만료일 설정',
+        'members.expiry.dialog.title.pending_student': '학생회원 승인',
+        'members.expiry.dialog.description.role': '달력에서 만료일을 선택하거나 직접 날짜를 입력하세요.',
+        'members.expiry.dialog.description.addon': '달력에서 부가 멤버십 만료일을 선택하거나 직접 날짜를 입력하세요.',
+        'members.expiry.dialog.description.pending_student': '학생회원 승인에 사용할 만료일을 선택하세요.',
+        'members.expiry.dialog.input_calendar': '달력',
+        'members.expiry.dialog.input_text': '날짜 입력',
+        'members.expiry.dialog.placeholder': 'YYYY-MM-DD',
+        'members.expiry.dialog.default_hint': '기본값: 오늘 기준 1년 후',
+        'members.expiry.dialog.confirm': '확인',
+        'members.expiry.dialog.cancel': '취소',
+        'members.expiry.dialog.invalid_date': 'YYYY-MM-DD 형식의 올바른 날짜를 입력하세요.',
+        'members.count.pending_student': '대기 중인 Student Member 신청 {count}건',
+        'members.pending.review': '대기 신청 검토',
+        'members.pending.review_hint': '대기 중인 Student Member 신청이 관리자 승인을 기다리고 있습니다.',
+        'members.confirm.reject_student': '이 Student Member 대기 신청을 반려하시겠습니까?'
+    }
+    const patchLocales = {}
+    MEMBER_PATCH_LOCALES.forEach(code => {
+        patchLocales[code] = code === 'ko' ? EXPIRY_KO : EXPIRY_EN
+    })
+    if (window.StatKISS_ADMIN_I18N && typeof window.StatKISS_ADMIN_I18N.register === 'function') {
+        window.StatKISS_ADMIN_I18N.register('members_management_integrated_patch_20260329', patchLocales)
+    }
+
+    window.member_pending_student_counter = typeof window.member_pending_student_counter === 'number' ? window.member_pending_student_counter : 0
+
+    function member_patch_pad_date_part(value) {
+        return String(value).padStart(2, '0')
+    }
+    function member_patch_get_seoul_today_parts() {
+        try {
+            const formatter = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit'
+            })
+            const partMap = {}
+            formatter.formatToParts(new Date()).forEach(part => {
+                if (part && part.type) partMap[part.type] = part.value
+            })
+            return { year: Number(partMap.year), month: Number(partMap.month), day: Number(partMap.day) }
+        } catch (error) {
+            const today = new Date()
+            return { year: today.getFullYear(), month: today.getMonth() + 1, day: today.getDate() }
+        }
+    }
+    function member_patch_default_expiry_date() {
+        const today = member_patch_get_seoul_today_parts()
+        const targetYear = today.year + 1
+        const targetMonth = today.month
+        const maxDay = new Date(targetYear, targetMonth, 0).getDate()
+        const targetDay = Math.min(today.day, maxDay)
+        return [targetYear, member_patch_pad_date_part(targetMonth), member_patch_pad_date_part(targetDay)].join('-')
+    }
+    function member_patch_normalize_expiry_date(value) {
+        const text = String(value || '').trim().slice(0, 10)
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return ''
+        const parts = text.split('-').map(Number)
+        const year = parts[0], month = parts[1], day = parts[2]
+        const parsed = new Date(year, month - 1, day)
+        if (Number.isNaN(parsed.getTime()) || parsed.getFullYear() !== year || parsed.getMonth() !== month - 1 || parsed.getDate() !== day) return ''
+        return text
+    }
+    function member_patch_is_never_expire(roleName, expiredAt) {
+        const roleText = String(roleName || '').trim()
+        const dateText = String(expiredAt || '').trim()
+        return roleText === 'Lifetime Member' || dateText.indexOf('9999-12-31') === 0 || dateText.indexOf('2299-12-31') === 0
+    }
+    function member_patch_is_addon_active(currentRole) {
+        const currentText = String(currentRole || '').trim()
+        return currentText === '1' || currentText.toLowerCase() === 'true' || currentText === 'KSS Joint Member'
+    }
+    function member_patch_focus_pending_students() {
+        const checkbox = document.getElementById('check_member_pending_student')
+        if (checkbox) checkbox.checked = true
+        const filterTarget = document.getElementById('div_member_search_filter')
+        if (filterTarget && typeof filterTarget.scrollIntoView === 'function') {
+            filterTarget.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+        get_member_list('search')
+    }
+    function member_patch_open_expiry_dialog(options) {
+        const opts = options || {}
+        const themeMode = member_patch_get_theme_mode()
+        const palette = member_management_get_palette(themeMode)
+        const defaultDate = member_patch_normalize_expiry_date(opts.defaultDate) || member_patch_default_expiry_date()
+        return new Promise(resolve => {
+            const overlay = document.createElement('div')
+            overlay.className = 'fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/70 p-4'
+            const card = document.createElement('div')
+            card.className = (palette.panel || '') + ' w-full max-w-lg space-y-5'
+            const headerWrap = document.createElement('div')
+            headerWrap.className = 'space-y-2'
+            const title = document.createElement('h3')
+            title.className = 'text-xl font-bold ' + (palette.heading || '')
+            title.textContent = opts.title || admin_t('members.expiry.dialog.title.role')
+            const description = document.createElement('p')
+            description.className = 'text-sm ' + (palette.muted || '')
+            description.textContent = opts.description || admin_t('members.expiry.dialog.description.role')
+            headerWrap.appendChild(title)
+            headerWrap.appendChild(description)
+            const bodyWrap = document.createElement('div')
+            bodyWrap.className = 'space-y-4'
+            const calendarLabel = document.createElement('label')
+            calendarLabel.className = 'flex flex-col gap-2'
+            const calendarLabelText = document.createElement('span')
+            calendarLabelText.className = 'text-sm font-medium ' + (palette.body || '')
+            calendarLabelText.textContent = admin_t('members.expiry.dialog.input_calendar')
+            const dateInput = document.createElement('input')
+            dateInput.type = 'date'
+            dateInput.value = defaultDate
+            dateInput.className = palette.input || ''
+            calendarLabel.appendChild(calendarLabelText)
+            calendarLabel.appendChild(dateInput)
+            const textLabel = document.createElement('label')
+            textLabel.className = 'flex flex-col gap-2'
+            const textLabelText = document.createElement('span')
+            textLabelText.className = 'text-sm font-medium ' + (palette.body || '')
+            textLabelText.textContent = admin_t('members.expiry.dialog.input_text')
+            const textInput = document.createElement('input')
+            textInput.type = 'text'
+            textInput.value = defaultDate
+            textInput.placeholder = admin_t('members.expiry.dialog.placeholder')
+            textInput.className = palette.input || ''
+            textLabel.appendChild(textLabelText)
+            textLabel.appendChild(textInput)
+            const hint = document.createElement('p')
+            hint.className = 'text-xs ' + (palette.muted || '')
+            hint.textContent = admin_t('members.expiry.dialog.default_hint') + ': ' + defaultDate
+            bodyWrap.appendChild(calendarLabel)
+            bodyWrap.appendChild(textLabel)
+            bodyWrap.appendChild(hint)
+            const actionWrap = document.createElement('div')
+            actionWrap.className = 'flex flex-col gap-3 sm:flex-row sm:justify-end'
+            const cancelBtn = document.createElement('button')
+            cancelBtn.type = 'button'
+            cancelBtn.className = palette.secondaryBtn || ''
+            cancelBtn.textContent = admin_t('members.expiry.dialog.cancel')
+            const confirmBtn = document.createElement('button')
+            confirmBtn.type = 'button'
+            confirmBtn.className = palette.primaryBtn || ''
+            confirmBtn.textContent = admin_t('members.expiry.dialog.confirm')
+            actionWrap.appendChild(cancelBtn)
+            actionWrap.appendChild(confirmBtn)
+            card.appendChild(headerWrap)
+            card.appendChild(bodyWrap)
+            card.appendChild(actionWrap)
+            overlay.appendChild(card)
+            document.body.appendChild(overlay)
+            const cleanup = (result) => {
+                document.removeEventListener('keydown', onKeyDown)
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay)
+                resolve(result)
+            }
+            const syncDateToText = () => { if (dateInput.value) textInput.value = dateInput.value }
+            const syncTextToDate = () => {
+                const normalized = member_patch_normalize_expiry_date(textInput.value)
+                if (normalized) dateInput.value = normalized
+            }
+            const onKeyDown = (event) => {
+                if (event.key === 'Escape') return cleanup(null)
+                if (event.key === 'Enter') { event.preventDefault(); confirmBtn.click() }
+            }
+            overlay.addEventListener('click', (event) => { if (event.target === overlay) cleanup(null) })
+            dateInput.addEventListener('input', syncDateToText)
+            textInput.addEventListener('input', syncTextToDate)
+            cancelBtn.addEventListener('click', () => cleanup(null))
+            confirmBtn.addEventListener('click', () => {
+                const normalized = member_patch_normalize_expiry_date(textInput.value || dateInput.value)
+                if (!normalized) {
+                    alert(admin_t('members.expiry.dialog.invalid_date'))
+                    textInput.focus()
+                    return
+                }
+                cleanup(normalized)
+            })
+            document.addEventListener('keydown', onKeyDown)
+            window.setTimeout(() => {
+                dateInput.focus()
+                try { if (dateInput.showPicker) dateInput.showPicker() } catch (error) {}
+            }, 0)
+        })
+    }
+    function member_patch_request_role_expiry(roleName) {
+        if (roleName === 'Lifetime Member') return Promise.resolve('9999-12-31')
+        if (roleName === 'Non-member') return Promise.resolve('')
+        return member_patch_open_expiry_dialog({
+            title: admin_t('members.expiry.dialog.title.role'),
+            description: admin_t('members.expiry.dialog.description.role'),
+            defaultDate: member_patch_default_expiry_date(),
+        })
+    }
+    function member_patch_request_addon_expiry() {
+        return member_patch_open_expiry_dialog({
+            title: admin_t('members.expiry.dialog.title.addon'),
+            description: admin_t('members.expiry.dialog.description.addon'),
+            defaultDate: member_patch_default_expiry_date(),
+        })
+    }
+    function member_patch_request_pending_student_expiry() {
+        return member_patch_open_expiry_dialog({
+            title: admin_t('members.expiry.dialog.title.pending_student'),
+            description: admin_t('members.expiry.dialog.description.pending_student'),
+            defaultDate: member_patch_default_expiry_date(),
+        })
+    }
+
+    click_btn_change_membership = async function (uuid_user, sel_membership, current_role) {
+        if (!uuid_user || !sel_membership || sel_membership === current_role) return
+        if (current_role === 'Administrator' || current_role === 'Developer') return
+        if (!confirm(admin_t('members.confirm.change_membership'))) return
+        if (toggle_btn_change_membership) return
+        const expiredAt = await member_patch_request_role_expiry(sel_membership)
+        if (sel_membership !== 'Lifetime Member' && sel_membership !== 'Non-member' && !expiredAt) return
+        toggle_btn_change_membership = true
+        try {
+            const request_data = new FormData()
+            request_data.append('uuid_user', uuid_user)
+            request_data.append('sel_membership', sel_membership)
+            request_data.append('current_role', current_role)
+            request_data.append('expired_at', expiredAt || '')
+            await member_patch_fetch_json(member_patch_build_url('/admin/ajax_change_membership/'), {
+                method: 'post', headers: { 'X-CSRFToken': getCookie('csrftoken') }, body: request_data,
+            })
+            await get_member_summary()
+            await get_member_list('search')
+        } catch (error) {
+            console.error(error)
+            alert((error && error.message) ? error.message : admin_t('members.load_error'))
+        } finally {
+            toggle_btn_change_membership = false
+        }
+    }
+
+    click_btn_change_membership_addon = async function (uuid_user, sel_membership, current_role) {
+        if (!uuid_user || !sel_membership) return
+        if (!confirm(admin_t('members.confirm.change_membership_addon'))) return
+        if (toggle_btn_change_membership) return
+        let expiredAt = ''
+        if (!member_patch_is_addon_active(current_role)) {
+            expiredAt = await member_patch_request_addon_expiry()
+            if (!expiredAt) return
+        }
+        toggle_btn_change_membership = true
+        try {
+            const request_data = new FormData()
+            request_data.append('uuid_user', uuid_user)
+            request_data.append('sel_membership', sel_membership)
+            request_data.append('current_role', current_role)
+            request_data.append('expired_at', expiredAt || '')
+            await member_patch_fetch_json(member_patch_build_url('/admin/ajax_change_membership_addon/'), {
+                method: 'post', headers: { 'X-CSRFToken': getCookie('csrftoken') }, body: request_data,
+            })
+            await get_member_summary()
+            await get_member_list('search')
+        } catch (error) {
+            console.error(error)
+            alert((error && error.message) ? error.message : admin_t('members.load_error'))
+        } finally {
+            toggle_btn_change_membership = false
+        }
+    }
+
+    click_btn_pending_student = async function (email) {
+        if (!email) return
+        let val_yesno = ''
+        let expiredAt = ''
+        if (confirm(admin_t('members.confirm.approve_student'))) {
+            val_yesno = 'YES'
+            expiredAt = await member_patch_request_pending_student_expiry()
+            if (!expiredAt) return
+        } else if (confirm(admin_t('members.confirm.reject_student'))) {
+            val_yesno = 'NO'
+        } else {
+            return
+        }
+        try {
+            const request_data = new FormData()
+            request_data.append('email', email)
+            request_data.append('val_yesno', val_yesno)
+            request_data.append('expired_at', expiredAt || '')
+            await member_patch_fetch_json(member_patch_build_url('/admin/ajax_change_pending_student/'), {
+                method: 'post', headers: { 'X-CSRFToken': getCookie('csrftoken') }, body: request_data,
+            })
+            await get_member_summary()
+            await get_member_list('search')
+        } catch (error) {
+            console.error(error)
+            alert((error && error.message) ? error.message : admin_t('members.load_error'))
+        }
+    }
+
+    Div_member_list_membership = function (props) {
+        const themeMode = props.themeMode || member_patch_get_theme_mode()
+        const isDark = themeMode === 'dark'
+        const inactiveClass = isDark
+            ? 'border border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:border-slate-600'
+            : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300'
+        const lockedClass = isDark
+            ? 'border border-slate-700 bg-slate-900 text-slate-500 cursor-default'
+            : 'border border-slate-200 bg-white text-slate-400 cursor-default'
+        const showNeverExpire = member_patch_is_never_expire(props.current_role, props.role_expired_at)
+        const renderRole = (roleName) => {
+            const isActive = props.current_role == roleName
+            const isLocked = roleName === 'Administrator' || roleName === 'Developer'
+            const className = isActive
+                ? 'inline-flex items-center justify-center rounded-full border px-3 py-2 text-xs font-semibold transition ' + member_management_role_tone(roleName, themeMode)
+                : 'inline-flex items-center justify-center rounded-full px-3 py-2 text-xs font-semibold transition ' + (isLocked ? lockedClass : inactiveClass)
+            return (
+                <button
+                    type="button"
+                    id={'membership_' + roleName.toLowerCase().replace(/[^a-z]/g, '_') + '_' + props.uuid_user}
+                    class={className}
+                    disabled={isLocked}
+                    onClick={() => {
+                        if (!isActive && !isLocked) click_btn_change_membership(props.uuid_user, roleName, props.current_role)
+                    }}>
+                    {admin_role_label(roleName)}
+                </button>
+            )
+        }
+        return (
+            <div class="w-full space-y-3">
+                <div class="flex flex-wrap gap-2">
+                    {renderRole('Lifetime Member')}
+                    {renderRole('Regular Member')}
+                    {renderRole('Spouse Member')}
+                    {renderRole('Student Member')}
+                    {renderRole('Non-member')}
+                    {renderRole('Administrator')}
+                    {renderRole('Developer')}
+                </div>
+                {showNeverExpire ? (
+                    <p class="text-xs font-medium text-emerald-500">{admin_t('members.expiry.never')}</p>
+                ) : props.role_expired_at ? (
+                    <p class="text-xs font-medium text-rose-500">{admin_t('admin.common.expired_on', { date: props.role_expired_at })}</p>
+                ) : null}
+            </div>
+        )
+    }
+
+    Div_member_list_membership_addon = function (props) {
+        const themeMode = props.themeMode || member_patch_get_theme_mode()
+        const isDark = themeMode === 'dark'
+        const isActive = props.role_addon_kssjoint == 1 || props.role_addon_kssjoint == '1'
+        const className = isActive
+            ? 'inline-flex items-center justify-center rounded-full border px-3 py-2 text-xs font-semibold transition ' + (isDark
+                ? 'border-blue-400/35 bg-blue-500/15 text-blue-200'
+                : 'border-blue-200 bg-blue-50 text-blue-700')
+            : 'inline-flex items-center justify-center rounded-full border px-3 py-2 text-xs font-semibold transition ' + (isDark
+                ? 'border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:border-slate-600'
+                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300')
+        return (
+            <div class="w-full space-y-3">
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        type="button"
+                        id={'membership_addon_kssjoint_' + props.uuid_user}
+                        class={className}
+                        onClick={() => click_btn_change_membership_addon(props.uuid_user, 'KSS Joint Member', props.role_addon_kssjoint)}>
+                        {admin_role_label('KSS Joint Member')}
+                    </button>
+                </div>
+                {props.role_addon_kssjoint_expired_at != null ? (
+                    <p class="text-xs font-medium text-rose-500">{admin_t('admin.common.expired_on', { date: props.role_addon_kssjoint_expired_at })}</p>
+                ) : null}
+            </div>
+        )
+    }
+
+    Div_member_count = function (props) {
+        const palette = member_management_get_palette(member_patch_get_theme_mode())
+        const formattedCount = member_patch_format_number(props.count || 0)
+        const pendingCount = member_patch_safe_number(props.pendingStudentCount || 0)
+        const isDark = member_patch_get_theme_mode() === 'dark'
+        const pendingWrapClass = isDark ? 'rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4' : 'rounded-2xl border border-amber-200 bg-amber-50 p-4'
+        const pendingTextClass = isDark ? 'text-amber-100' : 'text-amber-800'
+        const pendingMutedClass = isDark ? 'text-amber-200/80' : 'text-amber-700'
+        return (
+            <div class={palette.panel} dir={member_patch_is_rtl() ? 'rtl' : 'ltr'}>
+                <div class="flex flex-col gap-5">
+                    <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="space-y-2">
+                            <p class={'text-sm font-medium ' + palette.countLabel}>{admin_t('members.count', { count: formattedCount })}</p>
+                            <p class={'text-4xl font-extrabold tracking-tight ' + palette.countNumber}>{formattedCount}</p>
+                        </div>
+                        <div>
+                            <button type="button" onClick={() => click_btn_download_list()} class={palette.secondaryBtn}>
+                                <img src="https://cdn.jsdelivr.net/gh/statground/statkiss_CDN/images/svg/button_download.svg" class="w-4 h-4 mr-2" />
+                                {admin_t('members.list_download')}
+                            </button>
+                        </div>
+                    </div>
+                    {pendingCount > 0 ? (
+                        <div class={pendingWrapClass}>
+                            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                                <div class="space-y-1">
+                                    <p class={'text-sm font-semibold ' + pendingTextClass}>{admin_t('members.count.pending_student', { count: member_patch_format_number(pendingCount) })}</p>
+                                    <p class={'text-sm ' + pendingMutedClass}>{admin_t('members.pending.review_hint')}</p>
+                                </div>
+                                <div>
+                                    <button type="button" onClick={() => member_patch_focus_pending_students()} class={palette.primaryBtn}>
+                                        {admin_t('members.pending.review')}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
+                </div>
+            </div>
+        )
+    }
+
+    Div_member_search_filter = function () {
+        const palette = member_management_get_palette(member_patch_get_theme_mode())
+        const checkboxItem = (id, label) => (
+            <label for={id} class={palette.checkboxItem}>
+                <input id={id} type="checkbox" value="" class={palette.checkbox} />
+                <span class={'text-sm font-medium ' + palette.body}>{label}</span>
+            </label>
+        )
+        const inputRow = (label, id) => (
+            <label class="flex flex-col gap-2">
+                <span class={'text-sm font-medium ' + palette.body}>{label}</span>
+                <input type="text" id={id} placeholder={label} onKeyDown={(event) => { if (event.key === 'Enter') click_btn_search() }} class={palette.input} />
+            </label>
+        )
+        return (
+            <div class={palette.panel} dir={member_patch_is_rtl() ? 'rtl' : 'ltr'}>
+                <div class="flex flex-col gap-6">
+                    <div class="space-y-1">
+                        <p class={'text-lg font-bold ' + palette.heading}>{admin_t('members.search.title')}</p>
+                        <p class={'text-sm ' + palette.muted}>{admin_t('members.title')}</p>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4">
+                        {inputRow(admin_t('admin.common.name'), 'txt_name')}
+                        {inputRow(admin_t('admin.common.email'), 'txt_email')}
+                    </div>
+                    <div class="space-y-3">
+                        <p class={'text-sm font-semibold ' + palette.heading}>{admin_t('admin.common.membership')}</p>
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                            {checkboxItem('check_member_admin', admin_t('admin.roles.admin') + ', ' + admin_role_label('Developer'))}
+                            {checkboxItem('check_member_lifetime', admin_role_label('Lifetime Member'))}
+                            {checkboxItem('check_member_regular', admin_role_label('Regular Member'))}
+                            {checkboxItem('check_member_spouse', admin_role_label('Spouse Member'))}
+                            {checkboxItem('check_member_student', admin_role_label('Student Member'))}
+                            {checkboxItem('check_member_member', admin_role_label('Non-member'))}
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <p class={'text-sm font-semibold ' + palette.heading}>{admin_t('admin.common.membership_addon')}</p>
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                            {checkboxItem('check_member_addon_none', admin_t('admin.common.none'))}
+                            {checkboxItem('check_member_addon_kssjoint', admin_role_label('KSS Joint Member'))}
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <p class={'text-sm font-semibold ' + palette.heading}>{admin_t('admin.common.pending_membership')}</p>
+                        <div class="grid grid-cols-1 gap-3">
+                            {checkboxItem('check_member_pending_student', admin_t('members.search.pending_student'))}
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                        <div id="div_btn_search"><Div_btn_search /></div>
+                        <button type="button" onClick={() => click_btn_reset_filters()} class={palette.secondaryBtn}>{admin_t('members.search.reset')}</button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    get_member_list = async function (mode) {
+        const isInitialMode = mode === 'init' || mode === 'search'
+        if (!isInitialMode && (toggle_page || !gv_member_has_next)) return
+        if (mode === 'init') {
+            page_num = 1; member_counter = 0; gv_member_list_pages = {}
+            gv_member_next_cursor_joined_at = ''; gv_member_next_cursor_uuid = ''; gv_member_has_next = false
+            member_patch_apply_default_member_filters()
+            gv_member_filter_state = member_patch_read_member_filter_state_from_dom()
+            ReactDOM.render(<Div_member_list_skeleton />, document.getElementById('div_member_list'))
+            ReactDOM.render(<Div_member_count_skeleton />, document.getElementById('div_member_count'))
+        } else if (mode === 'search') {
+            page_num = 1; member_counter = 0; gv_member_list_pages = {}
+            gv_member_next_cursor_joined_at = ''; gv_member_next_cursor_uuid = ''; gv_member_has_next = false
+            gv_member_filter_state = member_patch_read_member_filter_state_from_dom()
+            ReactDOM.render(<Div_member_list_skeleton />, document.getElementById('div_member_list'))
+            ReactDOM.render(<Div_member_count_skeleton />, document.getElementById('div_member_count'))
+        } else {
+            if (!gv_member_filter_state) gv_member_filter_state = member_patch_read_member_filter_state_from_dom()
+            page_num += 1
+            const nextTarget = document.getElementById('div_member_list_' + page_num.toString())
+            if (nextTarget) ReactDOM.render(<Div_member_list_skeleton />, nextTarget)
+        }
+        const filterState = member_patch_clone_filter_state(gv_member_filter_state || member_patch_read_member_filter_state_from_dom())
+        gv_member_filter_state = filterState
+        member_patch_abort_member_fetch()
+        member_patch_clear_member_list_observer()
+        toggle_page = true
+        const controller = new AbortController()
+        gv_member_fetch_controller = controller
+        const requestId = ++gv_member_request_serial
+        gv_member_active_request_id = requestId
+        const request_data = new FormData()
+        request_data.append('page', page_num)
+        request_data.append('include_count', isInitialMode ? 'YES' : 'NO')
+        member_patch_apply_filter_state_to_form_data(request_data, filterState)
+        if (!isInitialMode) {
+            request_data.append('cursor_joined_at', gv_member_next_cursor_joined_at || '')
+            request_data.append('cursor_uuid', gv_member_next_cursor_uuid || '')
+        }
+        try {
+            const data = await member_patch_fetch_json(member_patch_build_url('/admin/ajax_get_member_list/'), {
+                method: 'post', headers: { 'X-CSRFToken': getCookie('csrftoken') }, body: request_data, signal: controller.signal,
+            })
+            if (requestId !== gv_member_active_request_id) return
+            const rows = Array.isArray(data.list) ? data.list : Object.values(data.list || {})
+            gv_member_has_next = !!data.has_next
+            gv_member_next_cursor_joined_at = data.next_cursor_joined_at || ''
+            gv_member_next_cursor_uuid = data.next_cursor_uuid || ''
+            if (isInitialMode) {
+                gv_member_list_pages = {}
+                gv_member_list_pages[1] = rows
+                if (data.count && typeof data.count.cnt !== 'undefined' && data.count.cnt !== null) member_counter = member_patch_safe_number(data.count.cnt)
+                window.member_pending_student_counter = member_patch_safe_number(data && data.count ? data.count.pending_student_cnt : 0)
+                ReactDOM.render(<Div_member_list data={rows} />, document.getElementById('div_member_list'))
+                ReactDOM.render(<Div_member_count count={member_counter} pendingStudentCount={window.member_pending_student_counter} />, document.getElementById('div_member_count'))
+            } else {
+                const target = document.getElementById('div_member_list_' + page_num.toString())
+                if (!rows.length) {
+                    if (target) target.innerHTML = ''
+                    page_num = Math.max(1, page_num - 1)
+                    gv_member_has_next = false
+                    gv_member_next_cursor_joined_at = ''
+                    gv_member_next_cursor_uuid = ''
+                } else {
+                    gv_member_list_pages[page_num] = rows
+                    if (target) ReactDOM.render(<Div_member_list data={rows} />, target)
+                }
+            }
+            member_patch_attach_member_list_observer()
+        } catch (error) {
+            if (error && error.name === 'AbortError') return
+            console.error('get_member_list failed', error)
+            if (isInitialMode) {
+                ReactDOM.render(<Div_member_list data={[]} />, document.getElementById('div_member_list'))
+                ReactDOM.render(<Div_member_count count={member_counter} pendingStudentCount={window.member_pending_student_counter} />, document.getElementById('div_member_count'))
+            }
+        } finally {
+            if (requestId === gv_member_active_request_id) {
+                toggle_page = false
+                gv_member_fetch_controller = null
+            }
+        }
+    }
+
+    member_patch_rerender_management_from_cache = function () {
+        const filterTarget = document.getElementById('div_member_search_filter')
+        const countTarget = document.getElementById('div_member_count')
+        const listTarget = document.getElementById('div_member_list')
+        page_num = Math.max(1, Object.keys(gv_member_list_pages).length || 1)
+        if (filterTarget) {
+            ReactDOM.render(<Div_member_search_filter />, filterTarget)
+            if (gv_member_filter_state) member_patch_restore_filter_state(gv_member_filter_state)
+        }
+        if (countTarget) {
+            if (member_counter > 0 || Object.keys(gv_member_list_pages).length > 0 || window.member_pending_student_counter > 0) {
+                ReactDOM.render(<Div_member_count count={member_counter} pendingStudentCount={window.member_pending_student_counter} />, countTarget)
+            } else {
+                ReactDOM.render(<Div_member_count_skeleton />, countTarget)
+            }
+        }
+        if (listTarget) {
+            const rows = member_patch_get_cached_member_rows()
+            if (rows.length > 0) ReactDOM.render(<Div_member_list data={rows} />, listTarget)
+            else ReactDOM.render(<Div_member_list_skeleton />, listTarget)
+        }
+        member_patch_attach_member_list_observer()
+    }
+})();
