@@ -1,0 +1,817 @@
+window.StatKISS_ADMIN_I18N.register("members", {
+    "en": {
+        "members.title": "Member Management",
+        "members.description": "Search members, review signups, adjust memberships, and export filtered results.",
+        "members.summary.membership": "Membership",
+        "members.summary.signed_up": "Signed Up",
+        "members.count": "Member Count: {count}",
+        "members.list_download": "Download List",
+        "members.search.title": "Search Filters",
+        "members.card.change_password": "Change Password",
+        "members.card.joined_at": "Joined at {date}",
+        "members.card.affiliation": "Affiliation: {value}",
+        "members.card.title_label": "Title: {value}",
+        "members.card.education": "Education: {value}",
+        "members.card.interest": "Interest: {value}",
+        "members.graph.monthly_signups": "Monthly Sign-ups",
+        "members.graph.yearly_signups": "Yearly Sign-ups",
+        "members.confirm.change_membership": "Are you sure you want to change this member's membership?",
+        "members.confirm.change_membership_addon": "Are you sure you want to change this member's membership add-on?",
+        "members.confirm.approve_student": "Do you want to approve the Student membership application?"
+    },
+    "ko": {
+        "members.title": "회원 관리",
+        "members.description": "회원 검색, 가입 현황 확인, 멤버십 조정, 조건별 목록 다운로드를 처리합니다.",
+        "members.summary.membership": "멤버십 현황",
+        "members.summary.signed_up": "가입 현황",
+        "members.count": "회원 수: {count}",
+        "members.list_download": "목록 다운로드",
+        "members.search.title": "검색 필터",
+        "members.card.change_password": "비밀번호 변경",
+        "members.card.joined_at": "{date} 가입",
+        "members.card.affiliation": "소속: {value}",
+        "members.card.title_label": "직함: {value}",
+        "members.card.education": "학력: {value}",
+        "members.card.interest": "관심분야: {value}",
+        "members.graph.monthly_signups": "월별 가입자 수",
+        "members.graph.yearly_signups": "연도별 가입자 수",
+        "members.confirm.change_membership": "이 회원의 멤버십을 변경하시겠습니까?",
+        "members.confirm.change_membership_addon": "이 회원의 멤버십 부가항목을 변경하시겠습니까?",
+        "members.confirm.approve_student": "학생회원 신청을 승인하시겠습니까?"
+    },
+    "ja": {
+        "members.title": "会員管理",
+        "members.description": "会員を検索し、登録状況を確認し、会員区分を調整し、条件付きリストを出力します。",
+        "members.summary.membership": "会員区分",
+        "members.summary.signed_up": "登録状況",
+        "members.count": "会員数: {count}",
+        "members.list_download": "リストをダウンロード",
+        "members.search.title": "検索フィルター",
+        "members.card.change_password": "パスワード変更",
+        "members.card.joined_at": "{date}に登録",
+        "members.card.affiliation": "所属: {value}",
+        "members.card.title_label": "役職: {value}",
+        "members.card.education": "学歴: {value}",
+        "members.card.interest": "関心分野: {value}",
+        "members.graph.monthly_signups": "月別登録数",
+        "members.graph.yearly_signups": "年別登録数",
+        "members.confirm.change_membership": "この会員の会員区分を変更してもよろしいですか？",
+        "members.confirm.change_membership_addon": "この会員の追加会員項目を変更してもよろしいですか？",
+        "members.confirm.approve_student": "学生会員申請を承認しますか？"
+    },
+    "zh-Hans": {
+        "members.title": "会员管理",
+        "members.description": "搜索会员、查看注册情况、调整会员资格并导出筛选结果。",
+        "members.summary.membership": "会员资格",
+        "members.summary.signed_up": "注册情况",
+        "members.count": "会员数量: {count}",
+        "members.list_download": "下载列表",
+        "members.search.title": "搜索筛选器",
+        "members.card.change_password": "修改密码",
+        "members.card.joined_at": "加入时间 {date}",
+        "members.card.affiliation": "所属机构: {value}",
+        "members.card.title_label": "职称: {value}",
+        "members.card.education": "学历: {value}",
+        "members.card.interest": "兴趣领域: {value}",
+        "members.graph.monthly_signups": "每月注册数",
+        "members.graph.yearly_signups": "每年注册数",
+        "members.confirm.change_membership": "确定要更改该会员的会员资格吗？",
+        "members.confirm.change_membership_addon": "确定要更改该会员的会员附加项吗？",
+        "members.confirm.approve_student": "要批准学生会员申请吗？"
+    },
+    "zh-Hant": {
+        "members.title": "會員管理",
+        "members.description": "搜尋會員、查看註冊情況、調整會員資格並匯出篩選結果。",
+        "members.summary.membership": "會員資格",
+        "members.summary.signed_up": "註冊情況",
+        "members.count": "會員數量: {count}",
+        "members.list_download": "下載名單",
+        "members.search.title": "搜尋篩選器",
+        "members.card.change_password": "變更密碼",
+        "members.card.joined_at": "加入時間 {date}",
+        "members.card.affiliation": "所屬機構: {value}",
+        "members.card.title_label": "職稱: {value}",
+        "members.card.education": "學歷: {value}",
+        "members.card.interest": "興趣領域: {value}",
+        "members.graph.monthly_signups": "每月註冊數",
+        "members.graph.yearly_signups": "每年註冊數",
+        "members.confirm.change_membership": "確定要變更此會員的會員資格嗎？",
+        "members.confirm.change_membership_addon": "確定要變更此會員的會員附加項嗎？",
+        "members.confirm.approve_student": "要核准學生會員申請嗎？"
+    },
+    "es": {
+        "members.title": "Gestión de miembros",
+        "members.description": "Busque miembros, revise inscripciones, ajuste membresías y exporte resultados filtrados.",
+        "members.summary.membership": "Membresía",
+        "members.summary.signed_up": "Inscritos",
+        "members.count": "Cantidad de miembros: {count}",
+        "members.list_download": "Descargar lista",
+        "members.search.title": "Filtros de búsqueda",
+        "members.card.change_password": "Cambiar contraseña",
+        "members.card.joined_at": "Se unió el {date}",
+        "members.card.affiliation": "Afiliación: {value}",
+        "members.card.title_label": "Cargo: {value}",
+        "members.card.education": "Educación: {value}",
+        "members.card.interest": "Interés: {value}",
+        "members.graph.monthly_signups": "Inscripciones mensuales",
+        "members.graph.yearly_signups": "Inscripciones anuales",
+        "members.confirm.change_membership": "¿Seguro que desea cambiar la membresía de este miembro?",
+        "members.confirm.change_membership_addon": "¿Seguro que desea cambiar el complemento de membresía de este miembro?",
+        "members.confirm.approve_student": "¿Desea aprobar la solicitud de membresía estudiantil?"
+    },
+    "fr": {
+        "members.title": "Gestion des membres",
+        "members.description": "Recherchez des membres, consultez les inscriptions, ajustez les adhésions et exportez les résultats filtrés.",
+        "members.summary.membership": "Adhésion",
+        "members.summary.signed_up": "Inscriptions",
+        "members.count": "Nombre de membres : {count}",
+        "members.list_download": "Télécharger la liste",
+        "members.search.title": "Filtres de recherche",
+        "members.card.change_password": "Changer le mot de passe",
+        "members.card.joined_at": "Inscrit le {date}",
+        "members.card.affiliation": "Affiliation : {value}",
+        "members.card.title_label": "Titre : {value}",
+        "members.card.education": "Formation : {value}",
+        "members.card.interest": "Centre d’intérêt : {value}",
+        "members.graph.monthly_signups": "Inscriptions mensuelles",
+        "members.graph.yearly_signups": "Inscriptions annuelles",
+        "members.confirm.change_membership": "Voulez-vous vraiment modifier l’adhésion de ce membre ?",
+        "members.confirm.change_membership_addon": "Voulez-vous vraiment modifier l’option d’adhésion de ce membre ?",
+        "members.confirm.approve_student": "Voulez-vous approuver la demande d’adhésion étudiante ?"
+    },
+    "de": {
+        "members.title": "Mitgliederverwaltung",
+        "members.description": "Suchen Sie Mitglieder, prüfen Sie Anmeldungen, passen Sie Mitgliedschaften an und exportieren Sie gefilterte Ergebnisse.",
+        "members.summary.membership": "Mitgliedschaft",
+        "members.summary.signed_up": "Anmeldungen",
+        "members.count": "Mitgliederzahl: {count}",
+        "members.list_download": "Liste herunterladen",
+        "members.search.title": "Suchfilter",
+        "members.card.change_password": "Passwort ändern",
+        "members.card.joined_at": "Beigetreten am {date}",
+        "members.card.affiliation": "Zugehörigkeit: {value}",
+        "members.card.title_label": "Titel: {value}",
+        "members.card.education": "Ausbildung: {value}",
+        "members.card.interest": "Interesse: {value}",
+        "members.graph.monthly_signups": "Monatliche Anmeldungen",
+        "members.graph.yearly_signups": "Jährliche Anmeldungen",
+        "members.confirm.change_membership": "Möchten Sie die Mitgliedschaft dieses Mitglieds wirklich ändern?",
+        "members.confirm.change_membership_addon": "Möchten Sie den Mitgliedschafts-Zusatz dieses Mitglieds wirklich ändern?",
+        "members.confirm.approve_student": "Möchten Sie den Antrag auf studentische Mitgliedschaft genehmigen?"
+    },
+    "pt-BR": {
+        "members.title": "Gestão de membros",
+        "members.description": "Pesquise membros, revise inscrições, ajuste associações e exporte resultados filtrados.",
+        "members.summary.membership": "Associação",
+        "members.summary.signed_up": "Inscritos",
+        "members.count": "Total de membros: {count}",
+        "members.list_download": "Baixar lista",
+        "members.search.title": "Filtros de busca",
+        "members.card.change_password": "Alterar senha",
+        "members.card.joined_at": "Entrou em {date}",
+        "members.card.affiliation": "Afiliação: {value}",
+        "members.card.title_label": "Título: {value}",
+        "members.card.education": "Formação: {value}",
+        "members.card.interest": "Interesse: {value}",
+        "members.graph.monthly_signups": "Inscrições mensais",
+        "members.graph.yearly_signups": "Inscrições anuais",
+        "members.confirm.change_membership": "Tem certeza de que deseja alterar a associação deste membro?",
+        "members.confirm.change_membership_addon": "Tem certeza de que deseja alterar o complemento de associação deste membro?",
+        "members.confirm.approve_student": "Deseja aprovar a solicitação de associação estudantil?"
+    },
+    "ru": {
+        "members.title": "Управление участниками",
+        "members.description": "Ищите участников, просматривайте регистрации, меняйте членство и экспортируйте отфильтрованные результаты.",
+        "members.summary.membership": "Членство",
+        "members.summary.signed_up": "Регистрации",
+        "members.count": "Количество участников: {count}",
+        "members.list_download": "Скачать список",
+        "members.search.title": "Фильтры поиска",
+        "members.card.change_password": "Сменить пароль",
+        "members.card.joined_at": "Дата вступления: {date}",
+        "members.card.affiliation": "Организация: {value}",
+        "members.card.title_label": "Должность: {value}",
+        "members.card.education": "Образование: {value}",
+        "members.card.interest": "Интересы: {value}",
+        "members.graph.monthly_signups": "Ежемесячные регистрации",
+        "members.graph.yearly_signups": "Ежегодные регистрации",
+        "members.confirm.change_membership": "Вы уверены, что хотите изменить членство этого участника?",
+        "members.confirm.change_membership_addon": "Вы уверены, что хотите изменить дополнение к членству этого участника?",
+        "members.confirm.approve_student": "Одобрить заявку на студенческое членство?"
+    },
+    "id": {
+        "members.title": "Manajemen anggota",
+        "members.description": "Cari anggota, tinjau pendaftaran, sesuaikan keanggotaan, dan ekspor hasil yang telah difilter.",
+        "members.summary.membership": "Keanggotaan",
+        "members.summary.signed_up": "Terdaftar",
+        "members.count": "Jumlah anggota: {count}",
+        "members.list_download": "Unduh daftar",
+        "members.search.title": "Filter pencarian",
+        "members.card.change_password": "Ubah kata sandi",
+        "members.card.joined_at": "Bergabung pada {date}",
+        "members.card.affiliation": "Afiliasi: {value}",
+        "members.card.title_label": "Jabatan: {value}",
+        "members.card.education": "Pendidikan: {value}",
+        "members.card.interest": "Minat: {value}",
+        "members.graph.monthly_signups": "Pendaftaran bulanan",
+        "members.graph.yearly_signups": "Pendaftaran tahunan",
+        "members.confirm.change_membership": "Apakah Anda yakin ingin mengubah keanggotaan anggota ini?",
+        "members.confirm.change_membership_addon": "Apakah Anda yakin ingin mengubah add-on keanggotaan anggota ini?",
+        "members.confirm.approve_student": "Apakah Anda ingin menyetujui pengajuan keanggotaan mahasiswa?"
+    },
+    "vi": {
+        "members.title": "Quản lý hội viên",
+        "members.description": "Tìm hội viên, xem đăng ký, điều chỉnh hội viên và xuất kết quả đã lọc.",
+        "members.summary.membership": "Hội viên",
+        "members.summary.signed_up": "Đăng ký",
+        "members.count": "Số hội viên: {count}",
+        "members.list_download": "Tải danh sách",
+        "members.search.title": "Bộ lọc tìm kiếm",
+        "members.card.change_password": "Đổi mật khẩu",
+        "members.card.joined_at": "Tham gia vào {date}",
+        "members.card.affiliation": "Cơ quan: {value}",
+        "members.card.title_label": "Chức danh: {value}",
+        "members.card.education": "Học vấn: {value}",
+        "members.card.interest": "Mối quan tâm: {value}",
+        "members.graph.monthly_signups": "Đăng ký hằng tháng",
+        "members.graph.yearly_signups": "Đăng ký hằng năm",
+        "members.confirm.change_membership": "Bạn có chắc muốn thay đổi hội viên của người này không?",
+        "members.confirm.change_membership_addon": "Bạn có chắc muốn thay đổi tiện ích bổ sung hội viên của người này không?",
+        "members.confirm.approve_student": "Bạn có muốn phê duyệt đơn hội viên sinh viên không?"
+    },
+    "th": {
+        "members.title": "การจัดการสมาชิก",
+        "members.description": "ค้นหาสมาชิก ตรวจสอบการสมัคร ปรับสมาชิกภาพ และส่งออกผลลัพธ์ที่กรองแล้ว",
+        "members.summary.membership": "สมาชิกภาพ",
+        "members.summary.signed_up": "การสมัคร",
+        "members.count": "จำนวนสมาชิก: {count}",
+        "members.list_download": "ดาวน์โหลดรายการ",
+        "members.search.title": "ตัวกรองการค้นหา",
+        "members.card.change_password": "เปลี่ยนรหัสผ่าน",
+        "members.card.joined_at": "เข้าร่วมเมื่อ {date}",
+        "members.card.affiliation": "สังกัด: {value}",
+        "members.card.title_label": "ตำแหน่ง: {value}",
+        "members.card.education": "การศึกษา: {value}",
+        "members.card.interest": "ความสนใจ: {value}",
+        "members.graph.monthly_signups": "การสมัครรายเดือน",
+        "members.graph.yearly_signups": "การสมัครรายปี",
+        "members.confirm.change_membership": "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนสมาชิกภาพของสมาชิกคนนี้?",
+        "members.confirm.change_membership_addon": "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนส่วนเสริมสมาชิกภาพของสมาชิกคนนี้?",
+        "members.confirm.approve_student": "คุณต้องการอนุมัติใบสมัครสมาชิกนักศึกษาหรือไม่?"
+    },
+    "ms": {
+        "members.title": "Pengurusan ahli",
+        "members.description": "Cari ahli, semak pendaftaran, laraskan keahlian dan eksport hasil yang ditapis.",
+        "members.summary.membership": "Keahlian",
+        "members.summary.signed_up": "Pendaftaran",
+        "members.count": "Bilangan ahli: {count}",
+        "members.list_download": "Muat turun senarai",
+        "members.search.title": "Penapis carian",
+        "members.card.change_password": "Tukar kata laluan",
+        "members.card.joined_at": "Menyertai pada {date}",
+        "members.card.affiliation": "Afiliasi: {value}",
+        "members.card.title_label": "Jawatan: {value}",
+        "members.card.education": "Pendidikan: {value}",
+        "members.card.interest": "Minat: {value}",
+        "members.graph.monthly_signups": "Pendaftaran bulanan",
+        "members.graph.yearly_signups": "Pendaftaran tahunan",
+        "members.confirm.change_membership": "Adakah anda pasti mahu menukar keahlian ahli ini?",
+        "members.confirm.change_membership_addon": "Adakah anda pasti mahu menukar tambahan keahlian ahli ini?",
+        "members.confirm.approve_student": "Adakah anda mahu meluluskan permohonan keahlian pelajar?"
+    },
+    "fil": {
+        "members.title": "Pamamahala ng mga miyembro",
+        "members.description": "Maghanap ng mga miyembro, suriin ang mga signup, ayusin ang membership, at i-export ang mga na-filter na resulta.",
+        "members.summary.membership": "Membership",
+        "members.summary.signed_up": "Nag-sign up",
+        "members.count": "Bilang ng miyembro: {count}",
+        "members.list_download": "I-download ang listahan",
+        "members.search.title": "Mga filter sa paghahanap",
+        "members.card.change_password": "Palitan ang password",
+        "members.card.joined_at": "Sumali noong {date}",
+        "members.card.affiliation": "Afiliasyon: {value}",
+        "members.card.title_label": "Titulo: {value}",
+        "members.card.education": "Edukasyon: {value}",
+        "members.card.interest": "Interes: {value}",
+        "members.graph.monthly_signups": "Mga signup bawat buwan",
+        "members.graph.yearly_signups": "Mga signup bawat taon",
+        "members.confirm.change_membership": "Sigurado ka bang nais mong palitan ang membership ng miyembrong ito?",
+        "members.confirm.change_membership_addon": "Sigurado ka bang nais mong palitan ang add-on sa membership ng miyembrong ito?",
+        "members.confirm.approve_student": "Nais mo bang aprubahan ang aplikasyon para sa student membership?"
+    },
+    "hi": {
+        "members.title": "सदस्य प्रबंधन",
+        "members.description": "सदस्यों को खोजें, साइन-अप की समीक्षा करें, सदस्यता समायोजित करें और फ़िल्टर किए गए परिणाम निर्यात करें।",
+        "members.summary.membership": "सदस्यता",
+        "members.summary.signed_up": "साइन-अप",
+        "members.count": "सदस्य संख्या: {count}",
+        "members.list_download": "सूची डाउनलोड करें",
+        "members.search.title": "खोज फ़िल्टर",
+        "members.card.change_password": "पासवर्ड बदलें",
+        "members.card.joined_at": "{date} को शामिल हुए",
+        "members.card.affiliation": "संस्था: {value}",
+        "members.card.title_label": "पद: {value}",
+        "members.card.education": "शिक्षा: {value}",
+        "members.card.interest": "रुचि: {value}",
+        "members.graph.monthly_signups": "मासिक साइन-अप",
+        "members.graph.yearly_signups": "वार्षिक साइन-अप",
+        "members.confirm.change_membership": "क्या आप वाकई इस सदस्य की सदस्यता बदलना चाहते हैं?",
+        "members.confirm.change_membership_addon": "क्या आप वाकई इस सदस्य का सदस्यता ऐड-ऑन बदलना चाहते हैं?",
+        "members.confirm.approve_student": "क्या आप छात्र सदस्यता आवेदन को स्वीकृत करना चाहते हैं?"
+    },
+    "ar": {
+        "members.title": "إدارة الأعضاء",
+        "members.description": "ابحث عن الأعضاء وراجع التسجيلات وعدّل العضويات وصدّر النتائج المصفّاة.",
+        "members.summary.membership": "العضوية",
+        "members.summary.signed_up": "التسجيلات",
+        "members.count": "عدد الأعضاء: {count}",
+        "members.list_download": "تنزيل القائمة",
+        "members.search.title": "عوامل تصفية البحث",
+        "members.card.change_password": "تغيير كلمة المرور",
+        "members.card.joined_at": "انضم في {date}",
+        "members.card.affiliation": "الجهة: {value}",
+        "members.card.title_label": "المسمى: {value}",
+        "members.card.education": "التعليم: {value}",
+        "members.card.interest": "الاهتمام: {value}",
+        "members.graph.monthly_signups": "التسجيلات الشهرية",
+        "members.graph.yearly_signups": "التسجيلات السنوية",
+        "members.confirm.change_membership": "هل أنت متأكد من رغبتك في تغيير عضوية هذا العضو؟",
+        "members.confirm.change_membership_addon": "هل أنت متأكد من رغبتك في تغيير إضافة العضوية لهذا العضو؟",
+        "members.confirm.approve_student": "هل تريد اعتماد طلب عضوية الطالب؟"
+    },
+    "it": {
+        "members.title": "Gestione membri",
+        "members.description": "Cerca membri, controlla le iscrizioni, modifica le iscrizioni ed esporta i risultati filtrati.",
+        "members.summary.membership": "Iscrizione",
+        "members.summary.signed_up": "Iscritti",
+        "members.count": "Numero membri: {count}",
+        "members.list_download": "Scarica elenco",
+        "members.search.title": "Filtri di ricerca",
+        "members.card.change_password": "Cambia password",
+        "members.card.joined_at": "Iscritto il {date}",
+        "members.card.affiliation": "Affiliazione: {value}",
+        "members.card.title_label": "Titolo: {value}",
+        "members.card.education": "Formazione: {value}",
+        "members.card.interest": "Interesse: {value}",
+        "members.graph.monthly_signups": "Iscrizioni mensili",
+        "members.graph.yearly_signups": "Iscrizioni annuali",
+        "members.confirm.change_membership": "Sei sicuro di voler cambiare l’iscrizione di questo membro?",
+        "members.confirm.change_membership_addon": "Sei sicuro di voler cambiare il componente aggiuntivo dell’iscrizione di questo membro?",
+        "members.confirm.approve_student": "Vuoi approvare la richiesta di iscrizione studente?"
+    },
+    "nl": {
+        "members.title": "Ledenbeheer",
+        "members.description": "Zoek leden, bekijk aanmeldingen, pas lidmaatschappen aan en exporteer gefilterde resultaten.",
+        "members.summary.membership": "Lidmaatschap",
+        "members.summary.signed_up": "Aanmeldingen",
+        "members.count": "Aantal leden: {count}",
+        "members.list_download": "Lijst downloaden",
+        "members.search.title": "Zoekfilters",
+        "members.card.change_password": "Wachtwoord wijzigen",
+        "members.card.joined_at": "Lid sinds {date}",
+        "members.card.affiliation": "Affiliatie: {value}",
+        "members.card.title_label": "Titel: {value}",
+        "members.card.education": "Opleiding: {value}",
+        "members.card.interest": "Interesse: {value}",
+        "members.graph.monthly_signups": "Maandelijkse aanmeldingen",
+        "members.graph.yearly_signups": "Jaarlijkse aanmeldingen",
+        "members.confirm.change_membership": "Weet u zeker dat u het lidmaatschap van dit lid wilt wijzigen?",
+        "members.confirm.change_membership_addon": "Weet u zeker dat u de lidmaatschap-add-on van dit lid wilt wijzigen?",
+        "members.confirm.approve_student": "Wilt u de aanvraag voor studentlidmaatschap goedkeuren?"
+    },
+    "pl": {
+        "members.title": "Zarządzanie członkami",
+        "members.description": "Wyszukuj członków, przeglądaj rejestracje, dostosowuj członkostwo i eksportuj przefiltrowane wyniki.",
+        "members.summary.membership": "Członkostwo",
+        "members.summary.signed_up": "Rejestracje",
+        "members.count": "Liczba członków: {count}",
+        "members.list_download": "Pobierz listę",
+        "members.search.title": "Filtry wyszukiwania",
+        "members.card.change_password": "Zmień hasło",
+        "members.card.joined_at": "Dołączył {date}",
+        "members.card.affiliation": "Afiliacja: {value}",
+        "members.card.title_label": "Stanowisko: {value}",
+        "members.card.education": "Wykształcenie: {value}",
+        "members.card.interest": "Zainteresowania: {value}",
+        "members.graph.monthly_signups": "Miesięczne rejestracje",
+        "members.graph.yearly_signups": "Roczne rejestracje",
+        "members.confirm.change_membership": "Czy na pewno chcesz zmienić członkostwo tego członka?",
+        "members.confirm.change_membership_addon": "Czy na pewno chcesz zmienić dodatek do członkostwa tego członka?",
+        "members.confirm.approve_student": "Czy chcesz zatwierdzić wniosek o członkostwo studenckie?"
+    },
+    "sv": {
+        "members.title": "Medlemshantering",
+        "members.description": "Sök medlemmar, granska registreringar, justera medlemskap och exportera filtrerade resultat.",
+        "members.summary.membership": "Medlemskap",
+        "members.summary.signed_up": "Registreringar",
+        "members.count": "Antal medlemmar: {count}",
+        "members.list_download": "Ladda ner lista",
+        "members.search.title": "Sökfilter",
+        "members.card.change_password": "Byt lösenord",
+        "members.card.joined_at": "Gick med {date}",
+        "members.card.affiliation": "Organisation: {value}",
+        "members.card.title_label": "Titel: {value}",
+        "members.card.education": "Utbildning: {value}",
+        "members.card.interest": "Intresse: {value}",
+        "members.graph.monthly_signups": "Månatliga registreringar",
+        "members.graph.yearly_signups": "Årliga registreringar",
+        "members.confirm.change_membership": "Är du säker på att du vill ändra medlemskapet för denna medlem?",
+        "members.confirm.change_membership_addon": "Är du säker på att du vill ändra medlemskapstillägget för denna medlem?",
+        "members.confirm.approve_student": "Vill du godkänna ansökan om studentmedlemskap?"
+    },
+    "tr": {
+        "members.title": "Üye yönetimi",
+        "members.description": "Üyeleri arayın, kayıtları inceleyin, üyelikleri ayarlayın ve filtrelenmiş sonuçları dışa aktarın.",
+        "members.summary.membership": "Üyelik",
+        "members.summary.signed_up": "Kayıtlar",
+        "members.count": "Üye sayısı: {count}",
+        "members.list_download": "Listeyi indir",
+        "members.search.title": "Arama filtreleri",
+        "members.card.change_password": "Şifre değiştir",
+        "members.card.joined_at": "{date} tarihinde katıldı",
+        "members.card.affiliation": "Kurum: {value}",
+        "members.card.title_label": "Unvan: {value}",
+        "members.card.education": "Eğitim: {value}",
+        "members.card.interest": "İlgi alanı: {value}",
+        "members.graph.monthly_signups": "Aylık kayıtlar",
+        "members.graph.yearly_signups": "Yıllık kayıtlar",
+        "members.confirm.change_membership": "Bu üyenin üyeliğini değiştirmek istediğinizden emin misiniz?",
+        "members.confirm.change_membership_addon": "Bu üyenin üyelik eklentisini değiştirmek istediğinizden emin misiniz?",
+        "members.confirm.approve_student": "Öğrenci üyeliği başvurusunu onaylamak istiyor musunuz?"
+    },
+    "uk": {
+        "members.title": "Керування учасниками",
+        "members.description": "Шукайте учасників, переглядайте реєстрації, змінюйте членство та експортуйте відфільтровані результати.",
+        "members.summary.membership": "Членство",
+        "members.summary.signed_up": "Реєстрації",
+        "members.count": "Кількість учасників: {count}",
+        "members.list_download": "Завантажити список",
+        "members.search.title": "Фільтри пошуку",
+        "members.card.change_password": "Змінити пароль",
+        "members.card.joined_at": "Приєднався {date}",
+        "members.card.affiliation": "Організація: {value}",
+        "members.card.title_label": "Посада: {value}",
+        "members.card.education": "Освіта: {value}",
+        "members.card.interest": "Інтереси: {value}",
+        "members.graph.monthly_signups": "Щомісячні реєстрації",
+        "members.graph.yearly_signups": "Щорічні реєстрації",
+        "members.confirm.change_membership": "Ви впевнені, що хочете змінити членство цього учасника?",
+        "members.confirm.change_membership_addon": "Ви впевнені, що хочете змінити додаток до членства цього учасника?",
+        "members.confirm.approve_student": "Хочете схвалити заявку на студентське членство?"
+    }
+});
+
+let page_num = 1
+let member_counter = 0
+let toggle_page = false
+let toggle_btn_change_membership = false
+let toggle_btn_download_list = false
+
+let txt_name = null
+let txt_email = null
+
+let check_member_admin = "NO"
+let check_member_lifetime = "NO"
+let check_member_regular = "NO"
+let check_member_spouse = "NO"
+let check_member_student = "NO"
+let check_member_member = "NO"
+let check_member_addon_none = "NO"
+let check_member_addon_kssjoint = "NO"
+let check_member_pending_student = "NO"
+
+let class_member_active = "flex flex-row justify-center items-center text-xs font-light text-gray-700 w-fit px-2 py-1 rounded-lg border border-gray-700"
+let class_member_deactive = "flex flex-row justify-center items-center text-xs font-light text-gray-300 w-fit px-2 py-1 rounded-lg border border-gray-300 bg-white"
+
+function Div_member_list_skeleton_legacy() {
+	let class_skeleton = "flex flex-col bg-gray-300 rounded-lg w-full h-12 border border-gray-500 shadow-sm p-2"
+	return (
+		<div class="flex flex-col space-y-2 animate-pulse">
+			<div class={class_skeleton}></div>
+			<div class={class_skeleton}></div>
+			<div class={class_skeleton}></div>
+			<div class={class_skeleton}></div>
+			<div class={class_skeleton}></div>
+		</div>
+	)
+}
+
+function Div_member_count_skeleton_legacy(props) {
+	return (
+		<div class="flex flex-row w-full justify-between items-center">
+			<p>
+				<div class="h-2.5 bg-gray-200 rounded-full w-48 mb-4"></div>
+			</p>
+
+			<div>
+				<div class="h-2.5 bg-gray-200 rounded-full w-48 mb-4"></div>
+			</div>
+		</div>
+	)
+}
+
+function Div_btn_search_legacy() {
+    return (
+        <button type="button"
+                onClick={() => click_btn_search()}
+                class="py-1.5 px-5 text-white bg-blue-700 font-medium rounded-lg text-sm w-full md:w-auto text-center hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+            {admin_t('admin.common.search')}
+        </button>
+    )
+}
+
+function Div_btn_search_loading_legacy() {
+    return (
+        <button type="button"
+                class="py-1.5 px-5 text-white bg-blue-700 font-medium rounded-lg text-sm w-full md:w-auto text-center cursor-not-allowed hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+            <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+            </svg>
+            {admin_t('admin.common.search')}
+        </button>
+    )
+}
+
+function Div_btn_change_membership(props) {
+    return (
+        <button type="button"
+                onClick={() => click_btn_change_membership(props.uuid)}
+                class="py-1.5 px-5 text-white bg-red-400 font-medium rounded-lg text-xs w-full md:w-auto text-center hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+            {admin_t('admin.common.change')}
+        </button>
+    )
+}
+
+function Div_btn_change_membership_loading(props) {
+    return (
+        <button type="button"
+                class="py-1.5 px-5 text-white bg-red-400 font-medium rounded-lg text-xs w-full md:w-auto text-center hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 cursor-not-allowed">
+            <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+            </svg>
+            {admin_t('admin.common.change')}
+        </button>
+    )
+}
+
+function Div_member_list_membership_legacy(props) {
+    const renderRole = (roleName, bgClass) => {
+        const isActive = props.current_role == roleName
+        const className = isActive
+            ? class_member_active + ' ' + bgClass
+            : class_member_deactive + ((roleName != 'Administrator' && roleName != 'Developer') ? ' hover:bg-gray-100 hover:text-gray-900 hover:shadow cursor-pointer' : '')
+
+        return (
+            <p id={'membership_' + roleName.toLowerCase().replace(/[^a-z]/g, '_') + '_' + props.uuid_user}
+               class={className}
+               onClick={() => {
+                    if (!isActive && roleName != 'Administrator' && roleName != 'Developer') {
+                        click_btn_change_membership(props.uuid_user, roleName, props.current_role)
+                    }
+                }}>
+                {admin_role_label(roleName)}
+            </p>
+        )
+    }
+
+    return (
+        <div class="w-full">
+            <div class="flex flex-wrap justify-center items-center w-full space-x-2 space-y-1">
+                {renderRole('Lifetime Member', 'bg-yellow-100')}
+                {renderRole('Regular Member', 'bg-cyan-200')}
+                {renderRole('Spouse Member', 'bg-purple-200')}
+                {renderRole('Student Member', 'bg-green-200')}
+                {renderRole('Non-member', 'bg-blue-200')}
+                {renderRole('Administrator', 'bg-red-200')}
+                {renderRole('Developer', 'bg-red-200')}
+            </div>
+
+            <div class="flex flex-row justify-center items-center w-full space-x-2">
+                {
+                    props.role_expired_at && (
+                        <p class="flex flex-row justify-center items-center text-xs font-light text-red-500 px-2 py-1">
+                            {admin_t('admin.common.expired_on', { date: props.role_expired_at })}
+                        </p>
+                    )
+                }
+            </div>
+        </div>
+    )
+}
+
+function Div_member_list_membership_addon_legacy(props) {
+    return (
+        <div class="w-full">
+            <div class="flex flex-row justify-center items-center w-full space-x-2">
+                {
+                    props.role_addon_kssjoint == 1 || props.role_addon_kssjoint == '1'
+                    ?   <p id={'membership_addon_kssjoint_' + props.uuid_user} class={class_member_active + ' bg-blue-200 hover:bg-gray-100 hover:text-gray-900 hover:shadow cursor-pointer'}
+                            onClick={() => click_btn_change_membership_addon(props.uuid_user, 'KSS Joint Member', props.role_addon_kssjoint)}>
+                            {admin_role_label('KSS Joint Member')}
+                        </p>
+                    :   <p id={'membership_addon_kssjoint_' + props.uuid_user} class={class_member_deactive + ' hover:bg-gray-100 hover:text-gray-900 hover:shadow cursor-pointer'}
+                            onClick={() => click_btn_change_membership_addon(props.uuid_user, 'KSS Joint Member', props.role_addon_kssjoint)}>
+                            {admin_role_label('KSS Joint Member')}
+                        </p>
+                }
+            </div>
+
+            <div class="flex flex-row justify-center items-center w-full space-x-2">
+                {
+                    props.role_addon_kssjoint_expired_at != null
+                    ?   <p class="flex flex-row justify-center items-center text-xs font-light text-red-500 px-2 py-1">
+                            {admin_t('admin.common.expired_on', { date: props.role_addon_kssjoint_expired_at })}
+                        </p>
+                    :   ''
+                }
+            </div>
+        </div>
+    )
+}
+
+function Div_member_list_legacy(props) {
+    let classCard = 'flex flex-row justify-center items-center text-xs font-light bg-gray-100 px-2 py-1 rounded-lg'
+
+    const memberList = Object.keys(props.data).map((article) =>
+        <div class="flex flex-col justify-center items-start bg-white rounded-lg border border-gray-500 shadow-sm p-2 space-y-2 hover:bg-gray-100">
+            <div class="flex flex-row justify-between items-center w-full md:flex-col md:items-start md:space-y-2">
+                <div class="flex flex-row justify-start items-end md:flex-col md:items-start md:space-y-1">
+                    <p class="text-md font-bold tracking-tight text-gray-900 mr-4 md:mr-0">{props.data[article].name}</p>
+                    <p class="text-sm text-gray-500 mr-4 md:mr-0">{props.data[article].email}</p>
+                    {
+                        props.data[article].role_pending == 'Student Member' && (
+                            <p class="text-xs bg-red-500 text-white font-bold px-4 rounded-lg cursor-pointer"
+                               onClick={() => click_btn_pending_student(props.data[article].email)}>
+                                {admin_t('admin.roles.pending_student_application')}
+                            </p>
+                        )
+                    }
+                </div>
+
+                <div class="flex flex-col justify-end items-end md:items-start">
+                    <p class="text-sm bg-gray-500 text-white px-4 rounded-lg cursor-pointer"
+                       onClick={() => click_btn_like_change_password(props.data[article].email)} alt={admin_t('members.card.change_password')}>
+                        {admin_t('members.card.change_password')}
+                    </p>
+                    <p id={'div_member_list_btn_change_password_' + props.data[article].email} class="text-xs text-gray-500"></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 justify-center items-start w-full gap-2 md:grid-cols-1">
+                <div class="col-span-2 flex flex-col justify-center items-center w-full space-y-1 border border-blue-200 rounded-lg p-2 hover:bg-white md:col-span-1">
+                    <div class="flex flex-row justify-center items-center w-full space-x-2">
+                        <p class="block text-sm font-normal underline text-blue-700">{admin_t('admin.common.membership')}</p>
+                    </div>
+
+                    <div id={'div_member_list_btn_membership_' + props.data[article].uuid} class="w-full">
+                        <Div_member_list_membership uuid_user={props.data[article].uuid}
+                                                    current_role={props.data[article].role}
+                                                    role_expired_at={props.data[article].role_expired_at} />
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center items-center w-full space-y-1 border border-green-200 rounded-lg p-2 hover:bg-white">
+                    <div class="flex flex-row justify-center items-center w-full space-x-2">
+                        <p class="block text-sm font-normal underline text-blue-700">{admin_t('admin.common.membership_addon')}</p>
+                    </div>
+
+                    <div id={'div_member_list_btn_membership_addon_' + props.data[article].uuid} class="w-full">
+                        <Div_member_list_membership_addon uuid_user={props.data[article].uuid}
+                                                          role_addon_kssjoint={props.data[article].role_addon_kssjoint}
+                                                          role_addon_kssjoint_expired_at={props.data[article].role_addon_kssjoint_expired_at} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-start items-center space-x-2">
+                <div></div>
+                {
+                    props.data[article].officer !== 'Member' && (
+                        <p class="flex flex-row justify-center items-center text-xs font-light text-gray-500 bg-red-100 py-1 rounded-lg px-2">
+                            {props.data[article].officer}
+                        </p>
+                    )
+                }
+
+                <p class={classCard}>
+                    {admin_t('members.card.joined_at', { date: props.data[article].created_at })}
+                </p>
+
+                { props.data[article].affiliation && ( <p class={classCard}>{admin_t('members.card.affiliation', { value: props.data[article].affiliation })}</p> ) }
+                { props.data[article].title && ( <p class={classCard}>{admin_t('members.card.title_label', { value: props.data[article].title })}</p> ) }
+                { props.data[article].education && ( <p class={classCard}>{admin_t('members.card.education', { value: props.data[article].education })}</p> ) }
+                { props.data[article].interest && ( <p class={classCard}>{admin_t('members.card.interest', { value: props.data[article].interest })}</p> ) }
+            </div>
+        </div>
+    )
+
+    return (
+        <div class="flex flex-col w-full space-y-2">
+            {memberList}
+            <div id={'div_member_list_' + (page_num + 1).toString()}></div>
+        </div>
+    )
+}
+
+function Div_member_count_legacy(props) {
+    const formattedCount = props.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+    return (
+        <div class="flex flex-row w-full justify-between items-center md:flex-col md:items-start md:space-y-4">
+            <p>
+                {admin_t('members.count', { count: formattedCount })}
+            </p>
+
+            <div>
+                <button type="button"
+                        onClick={() => click_btn_download_list()}
+                        class="flex flex-row text-gray-900 bg-white border border-gray-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100">
+                    <img src="https://cdn.jsdelivr.net/gh/statground/statkiss_CDN/images/svg/button_download.svg" class="w-4 h-4 mr-2" />
+                    {admin_t('members.list_download')}
+                </button>
+            </div>
+        </div>
+    )
+}
+
+async function click_btn_search_legacy() {
+	get_member_list("search")
+}
+
+async function click_btn_change_membership(uuid_user, sel_membership, current_role) {
+    if (current_role != 'Administrator' && current_role != 'Developer') {
+        if (confirm(admin_t('members.confirm.change_membership'))) {
+            if (!toggle_btn_change_membership) {
+                toggle_btn_change_membership = true
+
+                const request_data = new FormData()
+                request_data.append('uuid_user', uuid_user)
+                request_data.append('sel_membership', sel_membership)
+                request_data.append('current_role', current_role)
+
+                const data = await fetch(admin_build_url('/admin/ajax_change_membership/'), {
+                    method: 'post',
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    body: request_data
+                })
+                .then(res => res.json())
+                .then(res => res)
+
+                get_member_summary()
+
+                toggle_btn_change_membership = false
+                ReactDOM.render(<Div_member_list_membership uuid_user={uuid_user}
+                                                            current_role={sel_membership}
+                                                            role_expired_at={data.data.role_expired_at} />, document.getElementById('div_member_list_btn_membership_' + uuid_user))
+            }
+        }
+    }
+}
+
+async function click_btn_change_membership_addon(uuid_user, sel_membership, current_role) {
+    if (confirm(admin_t('members.confirm.change_membership_addon'))) {
+        if (!toggle_btn_change_membership) {
+            toggle_btn_change_membership = true
+
+            const request_data = new FormData()
+            request_data.append('uuid_user', uuid_user)
+            request_data.append('sel_membership', sel_membership)
+            request_data.append('current_role', current_role)
+
+            const data = await fetch(admin_build_url('/admin/ajax_change_membership_addon/'), {
+                method: 'post',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: request_data
+            })
+            .then(res => res.json())
+            .then(res => res)
+
+            get_member_summary()
+
+            if (current_role == '0') { current_role = '1' } else { current_role = '0' }
+            toggle_btn_change_membership = false
+            ReactDOM.render(<Div_member_list_membership_addon uuid_user={uuid_user}
+                                                                 role_addon_kssjoint={current_role}
+                                                                 role_addon_kssjoint_expired_at={data.data.role_addon_kssjoint_expired_at} />, document.getElementById('div_member_list_btn_membership_addon_' + uuid_user))
+        }
+    }
+}
+
+async function click_btn_like_change_password_legacy(email) {
+	const request_data = new FormData();
+	request_data.append('email', email);      // 이메일
+
+	const data = await fetch(admin_build_url("/admin/ajax_get_change_password_link/"), {
+						method: "post", 
+						headers: { "X-CSRFToken": getCookie("csrftoken"), },
+						body: request_data
+						})
+						.then(res=> { return res.json(); })
+						.then(res=> { return res; });
+	//alert("URL for changing the password has been generated of " + email + ".\nPlease send the following URL:\n" + data['url'])
+	document.getElementById("div_member_list_btn_change_password_" + email).innerHTML = data['url']
+}
+
+// ===== Member dashboard patch: traffic-style layout + ECharts + daily/monthly/yearly =====
