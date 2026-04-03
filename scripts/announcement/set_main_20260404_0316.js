@@ -33,7 +33,7 @@ const { useEffect, useMemo, useRef, useState } = React;
         return base.endsWith("/") ? base : `${base}/`;
     }
     function getContext() {
-        const ctx = window.STATKISS_ANNOUNCEMENT_CONTEXT || {};
+        const ctx = window.ANNOUNCEMENT_CONTEXT || window.STATKISS_ANNOUNCEMENT_CONTEXT || {};
         return {
             url: ctx.url || window.url || "",
             mode: ctx.mode || "",
@@ -94,6 +94,12 @@ const { useEffect, useMemo, useRef, useState } = React;
     function buildAjaxPath(endpoint) {
         return `${getAnnouncementBasePath()}${endpoint}/`;
     }
+    function buildDownloadAllPath(articleUuid) {
+        const uuid = String(articleUuid || "").trim();
+        if (!uuid)
+            return "";
+        return `${getAnnouncementBasePath()}download-all/${uuid}/`;
+    }
     function parseCookie(name) {
         const prefix = `${name}=`;
         const items = (document.cookie || "").split(";");
@@ -128,9 +134,11 @@ const { useEffect, useMemo, useRef, useState } = React;
             return false;
         if (payload.is_superuser || payload.is_staff)
             return true;
-        const role = String(payload.role || payload.gv_role || "").trim();
-        const officer = String(payload.officer || "").trim();
-        return role === "Administrator" || role === "Developer" || (officer && officer !== "Member");
+        const role = String(payload.role || payload.gv_role || "").trim().toLowerCase();
+        const officer = String(payload.officer || payload.current_officer_roles || payload.current_officer_role || "").trim();
+        const isCurrentOfficer = payload.is_current_officer === true || payload.is_current_officer === 1 || String(payload.is_current_officer || "").trim() === "1";
+        const normalizedOfficer = officer.toLowerCase();
+        return role === "administrator" || role === "developer" || isCurrentOfficer || (!!normalizedOfficer && !["member", "non-member", "none", "null", "false", "0"].includes(normalizedOfficer));
     }
     async function postForm(endpoint, formData) {
         const response = await fetch(buildAjaxPath(endpoint), {
@@ -534,6 +542,7 @@ const { useEffect, useMemo, useRef, useState } = React;
         getAnnouncementBasePath,
         buildPagePath,
         buildAjaxPath,
+        buildDownloadAllPath,
         fetchHeaderUser,
         canManageAnnouncements,
         postForm,
@@ -553,7 +562,7 @@ const { useEffect, useMemo, useRef, useState } = React;
 })();
 function set_main() {
     const S = window.StatKISS_AnnouncementShared;
-    const { t, getContext, getCurrentLang, buildPagePath, fetchHeaderUser, canManageAnnouncements, postForm, setPageTitle, escapeHtml, getCategoryTitle, getCategoryDescription, injectAnnouncementThemeFallback, dedupeFiles, formatFileSize, formatAnnouncementDate, forceLinksToNewWindow, adaptRichContentForTheme, isAnnouncementDarkTheme, } = S;
+    const { t, getContext, getCurrentLang, buildPagePath, buildDownloadAllPath, fetchHeaderUser, canManageAnnouncements, postForm, setPageTitle, escapeHtml, getCategoryTitle, getCategoryDescription, injectAnnouncementThemeFallback, dedupeFiles, formatFileSize, formatAnnouncementDate, forceLinksToNewWindow, adaptRichContentForTheme, isAnnouncementDarkTheme, } = S;
     injectAnnouncementThemeFallback();
     const ctx = getContext();
     const PAGE_SIZE = 20;
@@ -578,12 +587,16 @@ function set_main() {
             React.createElement("div", { className: "rounded-3xl border border-red-200 bg-red-50 px-6 py-8 text-center shadow-sm" },
                 React.createElement("div", { className: "text-base font-semibold text-red-600" }, message || t("failedLoad", lang)))));
     }
-    function AttachmentList({ items, lang }) {
+    function AttachmentList({ items, lang, bundleUrl }) {
         if (!items || items.length === 0) {
             return null;
         }
+        const safeBundleUrl = String(bundleUrl || "").trim();
+        const canDownloadAll = items.length > 1 && safeBundleUrl !== "";
         return (React.createElement("section", { className: "mt-8 space-y-3" },
-            React.createElement("div", { className: "text-xs font-semibold uppercase tracking-[0.22em] text-slate-500" }, t("attachments", lang)),
+            React.createElement("div", { className: "flex flex-wrap items-center justify-between gap-2" },
+                React.createElement("div", { className: "text-xs font-semibold uppercase tracking-[0.22em] text-slate-500" }, t("attachments", lang)),
+                canDownloadAll ? (React.createElement("a", { href: safeBundleUrl, className: "inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50" }, t("downloadAll", lang))) : null),
             React.createElement("div", { className: "flex flex-col gap-2" }, items.map((item) => (React.createElement("a", { key: item.uuid, href: item.download_url, target: "_blank", rel: "noopener noreferrer", className: "sk-ann-card flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50" },
                 React.createElement("span", { className: "truncate text-sm font-medium text-slate-900" }, item.file_name),
                 React.createElement("span", { className: "shrink-0 text-xs text-slate-500" }, formatFileSize(item.file_size))))))));
@@ -843,6 +856,7 @@ function set_main() {
         const currentArticle = payload && payload.article ? payload.article : null;
         const sourceArticle = payload && payload.source_article ? payload.source_article : null;
         const attachments = payload && Array.isArray(payload.attachments) ? payload.attachments : [];
+        const attachmentBundleUrl = payload && payload.attachment_bundle_url ? payload.attachment_bundle_url : buildDownloadAllPath(ctx.uuid);
         const displayedArticle = viewMode === "original" && sourceArticle ? sourceArticle : currentArticle;
         const canViewOriginal = !!(payload && payload.can_view_original);
         const localizedCreatedAt = displayedArticle ? formatAnnouncementDate(displayedArticle.created_at_iso || displayedArticle.created_at, requestedLang) : "";
@@ -915,7 +929,7 @@ function set_main() {
                                     requestedLang === "ko" ? t("attachmentCount", requestedLang) : t("attachments", requestedLang))) : null)))),
                 React.createElement("section", { className: "bg-white px-6 py-8 md:px-8" },
                     React.createElement("div", { ref: contentRef, className: "sk-ann-content toastui-editor-contents max-w-none text-slate-800", dangerouslySetInnerHTML: { __html: renderedContent } }),
-                    React.createElement(AttachmentList, { items: attachments, lang: requestedLang })),
+                    React.createElement(AttachmentList, { items: attachments, lang: requestedLang, bundleUrl: attachmentBundleUrl })),
                 React.createElement("footer", { className: "border-t border-slate-200 bg-slate-50 px-6 py-4 md:px-8" },
                     React.createElement("div", { className: "flex flex-wrap justify-end gap-2" },
                         canManage ? (React.createElement("button", { type: "button", onClick: () => { window.location.href = buildPagePath("write"); }, className: "inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-xs md:text-sm font-semibold text-white shadow-sm hover:bg-blue-700" }, t("write", requestedLang))) : null,
@@ -985,19 +999,24 @@ function set_main() {
         document.head.appendChild(style);
     }
     function getSolidEditorMountApi() {
-        return window.mountStatkissContentEditor || window.mountEmbeddedContentEditor || null;
+        return window.mountContentEditor || window.mountStatkissContentEditor || window.mountEmbeddedContentEditor || null;
+    }
+    function getSolidEditorInitApi() {
+        return window.initContentEditor || window.initStatkissContentEditor || null;
     }
     function hasSolidEditorMountApi() {
-        return typeof window.initStatkissContentEditor === "function" || typeof getSolidEditorMountApi() === "function";
+        return typeof getSolidEditorInitApi() === "function" || typeof getSolidEditorMountApi() === "function";
     }
     function waitForSolidEditorApi(timeoutMs = 15000, interval = 50) {
         return new Promise((resolve, reject) => {
             const timeout = Number(timeoutMs) > 0 ? Number(timeoutMs) : 15000;
             const startedAt = Date.now();
             function finish() {
-                if (!hasSolidEditorMountApi())
+                const initApi = getSolidEditorInitApi();
+                const mountApi = getSolidEditorMountApi();
+                if (typeof initApi !== "function" && typeof mountApi !== "function")
                     return false;
-                resolve(window.initStatkissContentEditor || getSolidEditorMountApi());
+                resolve(initApi || mountApi);
                 return true;
             }
             if (finish())
@@ -1009,7 +1028,7 @@ function set_main() {
                 }
                 if (Date.now() - startedAt > timeout) {
                     window.clearInterval(timer);
-                    reject(new Error("Solid editor API was not found. Load editor.js from HTML before calling set_main()."));
+                    reject(new Error("Content editor API was not found. Load editor.js from HTML before calling set_main()."));
                 }
             }, interval);
         });
@@ -1050,8 +1069,9 @@ function set_main() {
         }
         host.appendChild(textarea);
         await waitForSolidEditorApi();
-        if (typeof window.initStatkissContentEditor === "function") {
-            const booted = await window.initStatkissContentEditor(textarea, mergedOptions);
+        const initContentEditor = getSolidEditorInitApi();
+        if (typeof initContentEditor === "function") {
+            const booted = await initContentEditor(textarea, mergedOptions);
             if (booted)
                 return booted;
         }
