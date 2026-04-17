@@ -1,0 +1,322 @@
+:root {
+  --sk-theme-bg-light: #ffffff;
+  --sk-theme-fg-light: #0f172a;
+  --sk-theme-muted-light: #475569;
+  --sk-theme-border-light: rgba(226, 232, 240, 0.96);
+  --sk-theme-surface-light: #ffffff;
+  --sk-theme-surface-soft-light: #f8fafc;
+  --sk-theme-header-top-light: rgba(255, 255, 255, 0.92);
+  --sk-theme-header-main-light: #ffffff;
+
+  --sk-theme-bg-dark: #020617;
+  --sk-theme-fg-dark: #e2e8f0;
+  --sk-theme-muted-dark: #94a3b8;
+  --sk-theme-border-dark: rgba(51, 65, 85, 0.88);
+  --sk-theme-surface-dark: rgba(11, 18, 32, 0.96);
+  --sk-theme-surface-soft-dark: rgba(15, 23, 42, 0.96);
+  --sk-theme-header-top-dark: rgba(2, 6, 23, 0.82);
+  --sk-theme-header-main-dark: #020617;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+html[data-statkiss-theme="light"],
+body[data-statkiss-theme="light"],
+html[data-theme="light"],
+body[data-theme="light"],
+html.light,
+body.light {
+  background-color: var(--sk-theme-bg-light);
+  color: var(--sk-theme-fg-light);
+  color-scheme: only light;
+}
+
+html[data-statkiss-theme="dark"],
+body[data-statkiss-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+html.dark,
+body.dark {
+  background-color: var(--sk-theme-bg-dark);
+  color: var(--sk-theme-fg-dark);
+  color-scheme: dark;
+}
+
+/* Header shell */
+html[data-statkiss-theme="light"] header.statkiss-header,
+body[data-statkiss-theme="light"] header.statkiss-header,
+html[data-theme="light"] header.statkiss-header,
+body[data-theme="light"] header.statkiss-header,
+html.light header.statkiss-header,
+body.light header.statkiss-header {
+  color: var(--sk-theme-fg-light);
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-header__top,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-header__top,
+html[data-theme="light"] header.statkiss-header .statkiss-header__top,
+body[data-theme="light"] header.statkiss-header .statkiss-header__top,
+html.light header.statkiss-header .statkiss-header__top,
+body.light header.statkiss-header .statkiss-header__top {
+  background: var(--sk-theme-header-top-light) !important;
+  border-color: var(--sk-theme-border-light) !important;
+  color: var(--sk-theme-fg-light) !important;
+  opacity: 1 !important;
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-header__main,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-header__main,
+html[data-theme="light"] header.statkiss-header .statkiss-header__main,
+body[data-theme="light"] header.statkiss-header .statkiss-header__main,
+html.light header.statkiss-header .statkiss-header__main,
+body.light header.statkiss-header .statkiss-header__main {
+  background: var(--sk-theme-header-main-light) !important;
+  color: var(--sk-theme-fg-light) !important;
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-card,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-mega,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-btn,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-card,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-mega,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-btn,
+html[data-theme="light"] header.statkiss-header .statkiss-card,
+html[data-theme="light"] header.statkiss-header .statkiss-mega,
+html[data-theme="light"] header.statkiss-header .statkiss-btn,
+body[data-theme="light"] header.statkiss-header .statkiss-card,
+body[data-theme="light"] header.statkiss-header .statkiss-mega,
+body[data-theme="light"] header.statkiss-header .statkiss-btn,
+html.light header.statkiss-header .statkiss-card,
+html.light header.statkiss-header .statkiss-mega,
+html.light header.statkiss-header .statkiss-btn,
+body.light header.statkiss-header .statkiss-card,
+body.light header.statkiss-header .statkiss-mega,
+body.light header.statkiss-header .statkiss-btn {
+  background: var(--sk-theme-surface-light) !important;
+  border-color: var(--sk-theme-border-light) !important;
+  color: var(--sk-theme-fg-light) !important;
+  opacity: 1 !important;
+  backdrop-filter: blur(16px);
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-navbtn,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-toplink,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-iconbtn,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-adminbtn,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-navbtn,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-toplink,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-iconbtn,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-adminbtn,
+html[data-theme="light"] header.statkiss-header .statkiss-navbtn,
+html[data-theme="light"] header.statkiss-header .statkiss-toplink,
+html[data-theme="light"] header.statkiss-header .statkiss-iconbtn,
+html[data-theme="light"] header.statkiss-header .statkiss-adminbtn,
+body[data-theme="light"] header.statkiss-header .statkiss-navbtn,
+body[data-theme="light"] header.statkiss-header .statkiss-toplink,
+body[data-theme="light"] header.statkiss-header .statkiss-iconbtn,
+body[data-theme="light"] header.statkiss-header .statkiss-adminbtn,
+html.light header.statkiss-header .statkiss-navbtn,
+html.light header.statkiss-header .statkiss-toplink,
+html.light header.statkiss-header .statkiss-iconbtn,
+html.light header.statkiss-header .statkiss-adminbtn,
+body.light header.statkiss-header .statkiss-navbtn,
+body.light header.statkiss-header .statkiss-toplink,
+body.light header.statkiss-header .statkiss-iconbtn,
+body.light header.statkiss-header .statkiss-adminbtn {
+  color: var(--sk-theme-fg-light) !important;
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-navbtn:hover,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-toplink:hover,
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-iconbtn:hover,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-navbtn:hover,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-toplink:hover,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-iconbtn:hover,
+html[data-theme="light"] header.statkiss-header .statkiss-navbtn:hover,
+html[data-theme="light"] header.statkiss-header .statkiss-toplink:hover,
+html[data-theme="light"] header.statkiss-header .statkiss-iconbtn:hover,
+body[data-theme="light"] header.statkiss-header .statkiss-navbtn:hover,
+body[data-theme="light"] header.statkiss-header .statkiss-toplink:hover,
+body[data-theme="light"] header.statkiss-header .statkiss-iconbtn:hover,
+html.light header.statkiss-header .statkiss-navbtn:hover,
+html.light header.statkiss-header .statkiss-toplink:hover,
+html.light header.statkiss-header .statkiss-iconbtn:hover,
+body.light header.statkiss-header .statkiss-navbtn:hover,
+body.light header.statkiss-header .statkiss-toplink:hover,
+body.light header.statkiss-header .statkiss-iconbtn:hover {
+  background: var(--sk-theme-surface-soft-light) !important;
+}
+
+html[data-statkiss-theme="light"] header.statkiss-header .statkiss-langitem--active,
+body[data-statkiss-theme="light"] header.statkiss-header .statkiss-langitem--active,
+html[data-theme="light"] header.statkiss-header .statkiss-langitem--active,
+body[data-theme="light"] header.statkiss-header .statkiss-langitem--active,
+html.light header.statkiss-header .statkiss-langitem--active,
+body.light header.statkiss-header .statkiss-langitem--active {
+  background: var(--sk-theme-surface-soft-light) !important;
+  color: var(--sk-theme-fg-light) !important;
+}
+
+/* Dark header shell */
+html[data-statkiss-theme="dark"] header.statkiss-header,
+body[data-statkiss-theme="dark"] header.statkiss-header,
+html[data-theme="dark"] header.statkiss-header,
+body[data-theme="dark"] header.statkiss-header,
+html.dark header.statkiss-header,
+body.dark header.statkiss-header {
+  color: var(--sk-theme-fg-dark);
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-header__top,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-header__top,
+html[data-theme="dark"] header.statkiss-header .statkiss-header__top,
+body[data-theme="dark"] header.statkiss-header .statkiss-header__top,
+html.dark header.statkiss-header .statkiss-header__top,
+body.dark header.statkiss-header .statkiss-header__top {
+  background: var(--sk-theme-header-top-dark) !important;
+  border-color: var(--sk-theme-border-dark) !important;
+  color: var(--sk-theme-fg-dark) !important;
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-header__main,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-header__main,
+html[data-theme="dark"] header.statkiss-header .statkiss-header__main,
+body[data-theme="dark"] header.statkiss-header .statkiss-header__main,
+html.dark header.statkiss-header .statkiss-header__main,
+body.dark header.statkiss-header .statkiss-header__main {
+  background: var(--sk-theme-header-main-dark) !important;
+  color: var(--sk-theme-fg-dark) !important;
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-card,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-mega,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-btn,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-card,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-mega,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-btn,
+html[data-theme="dark"] header.statkiss-header .statkiss-card,
+html[data-theme="dark"] header.statkiss-header .statkiss-mega,
+html[data-theme="dark"] header.statkiss-header .statkiss-btn,
+body[data-theme="dark"] header.statkiss-header .statkiss-card,
+body[data-theme="dark"] header.statkiss-header .statkiss-mega,
+body[data-theme="dark"] header.statkiss-header .statkiss-btn,
+html.dark header.statkiss-header .statkiss-card,
+html.dark header.statkiss-header .statkiss-mega,
+html.dark header.statkiss-header .statkiss-btn,
+body.dark header.statkiss-header .statkiss-card,
+body.dark header.statkiss-header .statkiss-mega,
+body.dark header.statkiss-header .statkiss-btn {
+  background: var(--sk-theme-surface-dark) !important;
+  border-color: var(--sk-theme-border-dark) !important;
+  color: var(--sk-theme-fg-dark) !important;
+  opacity: 1 !important;
+  backdrop-filter: blur(18px);
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-navbtn,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-toplink,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-iconbtn,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-adminbtn,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-navbtn,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-toplink,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-iconbtn,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-adminbtn,
+html[data-theme="dark"] header.statkiss-header .statkiss-navbtn,
+html[data-theme="dark"] header.statkiss-header .statkiss-toplink,
+html[data-theme="dark"] header.statkiss-header .statkiss-iconbtn,
+html[data-theme="dark"] header.statkiss-header .statkiss-adminbtn,
+body[data-theme="dark"] header.statkiss-header .statkiss-navbtn,
+body[data-theme="dark"] header.statkiss-header .statkiss-toplink,
+body[data-theme="dark"] header.statkiss-header .statkiss-iconbtn,
+body[data-theme="dark"] header.statkiss-header .statkiss-adminbtn,
+html.dark header.statkiss-header .statkiss-navbtn,
+html.dark header.statkiss-header .statkiss-toplink,
+html.dark header.statkiss-header .statkiss-iconbtn,
+html.dark header.statkiss-header .statkiss-adminbtn,
+body.dark header.statkiss-header .statkiss-navbtn,
+body.dark header.statkiss-header .statkiss-toplink,
+body.dark header.statkiss-header .statkiss-iconbtn,
+body.dark header.statkiss-header .statkiss-adminbtn {
+  color: var(--sk-theme-fg-dark) !important;
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-navbtn:hover,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-toplink:hover,
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-iconbtn:hover,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-navbtn:hover,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-toplink:hover,
+body[data-statkiss-theme="dark"] header.statkiss-header .statkiss-iconbtn:hover,
+html[data-theme="dark"] header.statkiss-header .statkiss-navbtn:hover,
+html[data-theme="dark"] header.statkiss-header .statkiss-toplink:hover,
+html[data-theme="dark"] header.statkiss-header .statkiss-iconbtn:hover,
+body[data-theme="dark"] header.statkiss-header .statkiss-navbtn:hover,
+body[data-theme="dark"] header.statkiss-header .statkiss-toplink:hover,
+body[data-theme="dark"] header.statkiss-header .statkiss-iconbtn:hover,
+html.dark header.statkiss-header .statkiss-navbtn:hover,
+html.dark header.statkiss-header .statkiss-toplink:hover,
+html.dark header.statkiss-header .statkiss-iconbtn:hover,
+body.dark header.statkiss-header .statkiss-navbtn:hover,
+body.dark header.statkiss-header .statkiss-toplink:hover,
+body.dark header.statkiss-header .statkiss-iconbtn:hover {
+  background: var(--sk-theme-surface-soft-dark) !important;
+}
+
+html[data-statkiss-theme="dark"] header.statkiss-header .statkiss-navbtn.is-active,
+html[data-theme="dark"] header.statkiss-header .statkiss-navbtn.is-active,
+html.dark header.statkiss-header .statkiss-navbtn.is-active {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #0f172a !important;
+}
+
+/* Keep SVG icon color in sync with current theme */
+header.statkiss-header .statkiss-iconbtn svg,
+header.statkiss-header .statkiss-toplink svg,
+header.statkiss-header .statkiss-adminbtn svg,
+header.statkiss-header .statkiss-navbtn svg,
+header.statkiss-header .statkiss-iconbtn [class*="text-"],
+header.statkiss-header .statkiss-toplink [class*="text-"],
+header.statkiss-header .statkiss-adminbtn [class*="text-"],
+header.statkiss-header .statkiss-navbtn [class*="text-"] {
+  color: inherit !important;
+}
+
+header.statkiss-header .statkiss-mega,
+header.statkiss-header .statkiss-card {
+  background-image: none !important;
+}
+
+/* Footer shell */
+html[data-statkiss-theme="light"] footer#div_footer,
+body[data-statkiss-theme="light"] footer#div_footer,
+html[data-theme="light"] footer#div_footer,
+body[data-theme="light"] footer#div_footer,
+html.light footer#div_footer,
+body.light footer#div_footer {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border-top-color: var(--sk-theme-border-light) !important;
+}
+
+html[data-statkiss-theme="dark"] footer#div_footer,
+body[data-statkiss-theme="dark"] footer#div_footer,
+html[data-theme="dark"] footer#div_footer,
+body[data-theme="dark"] footer#div_footer,
+html.dark footer#div_footer,
+body.dark footer#div_footer {
+  background: var(--sk-theme-bg-dark) !important;
+  color: var(--sk-theme-fg-dark) !important;
+  border-top-color: var(--sk-theme-border-dark) !important;
+}
+
+html[data-statkiss-theme="dark"] footer#div_footer img,
+body[data-statkiss-theme="dark"] footer#div_footer img,
+html[data-theme="dark"] footer#div_footer img,
+body[data-theme="dark"] footer#div_footer img,
+html.dark footer#div_footer img,
+body.dark footer#div_footer img {
+  filter: invert(1);
+  opacity: .92;
+}
